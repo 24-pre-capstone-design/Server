@@ -1,9 +1,11 @@
 package com.pre_capstone_design_24.server.global.response;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @AllArgsConstructor
+@Getter
 public enum Status {
 
     //공통 정상 응답
@@ -16,6 +18,11 @@ public enum Status {
     FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON403", "금지된 요청입니다."),
     CONFLICT(HttpStatus.CONFLICT, "COMMON409", "이미 생성되었습니다."),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON500", "서버에 오류가 발생했습니다."),
+
+
+    //Owner 오류 응답
+    OWNER_NOT_FOUND(HttpStatus.NOT_FOUND, "OWNER404", "사장님이 존재하지 않습니다."),
+
 
     ;
 
