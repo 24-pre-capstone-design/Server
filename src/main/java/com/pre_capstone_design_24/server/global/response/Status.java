@@ -22,7 +22,13 @@ public enum Status {
 
     //Owner 오류 응답
     OWNER_NOT_FOUND(HttpStatus.NOT_FOUND, "OWNER404", "사장님이 존재하지 않습니다."),
+    OWNER_PASSWORD_INCORRECT(HttpStatus.BAD_REQUEST, "OWNER400", "비밀번호가 틀렸습니다."),
 
+    //JWT 오류 응답
+    JWT_WRONG_TYPE_TOKEN(HttpStatus.BAD_REQUEST, "JWT400", "JWT 타입이 틀렸습니다."),
+    JWT_EXPIRED_TOKEN(HttpStatus.BAD_REQUEST, "JWT400", "JWT가 만료되었습니다."),
+    JWT_NULL(HttpStatus.UNAUTHORIZED, "JWT401", "JWT가 NULL입니다."),
+    JWT_INVALID(HttpStatus.FORBIDDEN, "JWT403", "JWT가 유효하지 않습니다."),
 
     ;
 

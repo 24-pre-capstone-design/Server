@@ -8,6 +8,7 @@ import com.pre_capstone_design_24.server.requestDto.OwnerRequestDto;
 import com.pre_capstone_design_24.server.responseDto.OwnerResponseDto;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
@@ -16,8 +17,10 @@ public class OwnerService {
 
     private final OwnerRepository ownerRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     public void createOwner(OwnerRequestDto ownerRequestDto) {
-        Owner newOwner = Owner.of(ownerRequestDto);
+        Owner newOwner = Owner.of(ownerRequestDto, passwordEncoder);
         ownerRepository.save(newOwner);
     }
 
