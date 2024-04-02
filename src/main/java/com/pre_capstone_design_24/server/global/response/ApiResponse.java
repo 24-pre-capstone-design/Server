@@ -2,10 +2,14 @@ package com.pre_capstone_design_24.server.global.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 @Builder
-@JsonPropertyOrder({"isSuccess", "status", "message", "data"})
+@AllArgsConstructor
+@JsonPropertyOrder({"success", "status", "message", "data"})
 public class ApiResponse<T> {
 
     private final boolean isSuccess;
