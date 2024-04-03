@@ -2,6 +2,7 @@ package com.pre_capstone_design_24.server.global.auth;
 
 import com.pre_capstone_design_24.server.domain.Role;
 import com.pre_capstone_design_24.server.domain.Token;
+import com.pre_capstone_design_24.server.global.response.GeneralException;
 import com.pre_capstone_design_24.server.global.response.Status;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -122,6 +123,15 @@ public class JwtProvider {
             return bearerToken.substring(7);
         }
         return null;
+    }
+
+    public String getUsernameFromAuthentication() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof User)) {
+            throw new GeneralException(Status.UNAUTHORIZED);
+        }
+        User user = (User) authentication.getPrincipal();
+        return user.getUsername();
     }
 
 }
