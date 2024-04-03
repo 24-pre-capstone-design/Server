@@ -43,4 +43,11 @@ public class OwnerController {
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), ownerResponseDto);
     }
 
+    @Operation(summary = "로그인한 사용자 확인용")
+    @GetMapping("")
+    public ApiResponse<?> getLoginOwner() {
+        OwnerResponseDto ownerResponseDto = ownerService.getLoginOwner();
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), ownerResponseDto);
+    }
+
 }
