@@ -35,4 +35,8 @@ public class FileService {
         return UploadedFileResponseDto.toDto(uploadedFile);
     }
 
+    public void deleteFile() {
+
+    }
+
 }

@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +31,15 @@ public class FileController {
     ) throws IOException {
         UploadedFileResponseDto uploadedFileResponseDto = fileService.saveFile(multipartFile);
         return ApiResponse.onSuccess(Status.CREATED.getCode(), Status.CREATED.getMessage(), uploadedFileResponseDto);
+    }
+
+    @Operation(summary = "파일 삭제")
+    @DeleteMapping(value = "")
+    public ApiResponse<?> deleteFile(
+            @RequestParam(name = "multipartFile") MultipartFile multipartFile
+    ) throws IOException {
+        fileService.deleteFile();
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), null);
     }
 
 }
