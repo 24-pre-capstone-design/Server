@@ -32,8 +32,10 @@ public class FileService {
         String savedFileName = new File(savedFilePath).getName();
         String url = fileURL + "/" + savedFileName;
 
-        UploadedFile uploadedFile = UploadedFile.create(multipartFile.getOriginalFilename(), savedFileName, savedFilePath, url, multipartFile.getSize(), multipartFile.getContentType());
-        uploadedFileRepository.save(uploadedFile);
+        UploadedFile uploadedFile = UploadedFile.create(
+                multipartFile.getOriginalFilename(), savedFileName, savedFilePath,
+                url, multipartFile.getSize(), multipartFile.getContentType());
+        save(uploadedFile);
         return UploadedFileResponseDto.toDto(uploadedFile);
     }
 
@@ -47,6 +49,10 @@ public class FileService {
         }
         fileHandler.deleteFile(filePath);
         delete(uploadedFile);
+    }
+
+    public void save(UploadedFile uploadedFile) {
+        uploadedFileRepository.save(uploadedFile);
     }
 
     public void delete(UploadedFile uploadedFile) {

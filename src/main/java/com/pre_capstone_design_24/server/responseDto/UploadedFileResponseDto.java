@@ -18,25 +18,13 @@ public class UploadedFileResponseDto {
 
     private String originalFileName;
 
-    private String savedFileName;
-
-    private String savedPath;
-
     private String url;
-
-    private Long fileSize;
-
-    private String contentType;
 
     public static UploadedFileResponseDto toDto(UploadedFile uploadedFile) {
         return UploadedFileResponseDto.builder()
                 .id(uploadedFile.getId())
                 .originalFileName(uploadedFile.getOriginalFileName())
-                .savedFileName(uploadedFile.getSavedFileName())
-                .savedPath(uploadedFile.getSavedPath())
                 .url(uploadedFile.getUrl())
-                .fileSize(uploadedFile.getFileSize())
-                .contentType(uploadedFile.getContentType())
                 .build();
     }
 

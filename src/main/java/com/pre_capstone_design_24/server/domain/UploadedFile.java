@@ -39,7 +39,9 @@ public class UploadedFile {
     @Column(nullable = false)
     private String contentType;
 
-    public static UploadedFile create(String originalFileName, String savedFileName, String savedPath, String url, Long fileSize, String contentType) {
+    public static UploadedFile create(
+            String originalFileName, String savedFileName,
+            String savedPath, String url, Long fileSize, String contentType) {
         return UploadedFile.builder()
                 .originalFileName(originalFileName)
                 .savedFileName(savedFileName)

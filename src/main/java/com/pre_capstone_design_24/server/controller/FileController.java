@@ -37,7 +37,7 @@ public class FileController {
     @DeleteMapping(value = "")
     public ApiResponse<?> deleteFile(
             @RequestParam(name = "fileUrl") String fileUrl
-    ) throws IOException {
+    ) {
         fileService.deleteFile(fileUrl);
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), null);
     }
