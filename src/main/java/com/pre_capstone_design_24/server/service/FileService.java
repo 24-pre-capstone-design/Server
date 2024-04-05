@@ -2,6 +2,8 @@ package com.pre_capstone_design_24.server.service;
 
 import com.pre_capstone_design_24.server.domain.UploadedFile;
 import com.pre_capstone_design_24.server.global.handler.FileHandler;
+import com.pre_capstone_design_24.server.global.response.GeneralException;
+import com.pre_capstone_design_24.server.global.response.Status;
 import com.pre_capstone_design_24.server.repository.UploadedFileRepository;
 import com.pre_capstone_design_24.server.responseDto.UploadedFileResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,8 +37,20 @@ public class FileService {
         return UploadedFileResponseDto.toDto(uploadedFile);
     }
 
-    public void deleteFile() {
+    public void deleteFile(String fileUrl) {
+        UploadedFile uploadedFile = uploadedFileRepository.findByUrl(fileUrl)
+                .orElseThrow(() -> new GeneralException(Status.FILE_NOT_FOUND_IN_DB));
+        String filePath = uploadedFile.getSavedPath();
+        File savedFile = new File(filePath);
+        if (!savedFile.exists()) {
+            throw new GeneralException(Status.FILE_NOT_FOUND_IN_STORAGE);
+        }
+        fileHandler.deleteFile(filePath);
+        delete(uploadedFile);
+    }
 
+    public void delete(UploadedFile uploadedFile) {
+        uploadedFileRepository.delete(uploadedFile);
     }
 
 }

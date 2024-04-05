@@ -36,6 +36,11 @@ public class FileHandler {
         return savePath;
     }
 
+    public void deleteFile(String filePath) {
+        File file = new File(filePath);
+        file.delete();
+    }
+
     public String makeFileName(String extension) {
         return (System.nanoTime() + "_" + UUID.randomUUID() + "." + extension);
     }

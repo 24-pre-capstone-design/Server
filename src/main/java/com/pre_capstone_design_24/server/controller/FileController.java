@@ -36,9 +36,9 @@ public class FileController {
     @Operation(summary = "파일 삭제")
     @DeleteMapping(value = "")
     public ApiResponse<?> deleteFile(
-            @RequestParam(name = "multipartFile") MultipartFile multipartFile
+            @RequestParam(name = "fileUrl") String fileUrl
     ) throws IOException {
-        fileService.deleteFile();
+        fileService.deleteFile(fileUrl);
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), null);
     }
 
