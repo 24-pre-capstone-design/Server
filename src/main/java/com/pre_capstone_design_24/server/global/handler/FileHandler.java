@@ -33,7 +33,6 @@ public class FileHandler {
         File file = new File(savePath);
         ensureParentDirectoryExists(file);
         multipartFile.transferTo(file);
-        //setFilePermissions(file, savePath, extension);
         return savePath;
     }
 
