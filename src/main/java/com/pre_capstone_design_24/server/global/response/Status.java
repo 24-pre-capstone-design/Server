@@ -23,6 +23,11 @@ public enum Status {
     //Owner 오류 응답
     OWNER_NOT_FOUND(HttpStatus.NOT_FOUND, "OWNER404", "사장님이 존재하지 않습니다."),
     OWNER_PASSWORD_INCORRECT(HttpStatus.BAD_REQUEST, "OWNER400", "비밀번호가 틀렸습니다."),
+    OWNER_ID_ALREADY_EXISTS(HttpStatus.BAD_REQUEST,"OWNER400", "이미 존재하는 ID입니다."),
+    OWNER_PASSWORD_IS_THE_SAME(HttpStatus.BAD_REQUEST, "OWNER400", "기존 비밀번호와 동일합니다."),
+
+    //Employee 오류 응답
+    EMPLOYEE_NOT_FOUND(HttpStatus.NOT_FOUND, "EMPLOYEE404", "직원이 존재하지 않습니다."),
 
     //JWT 오류 응답
     JWT_WRONG_TYPE_TOKEN(HttpStatus.BAD_REQUEST, "JWT400", "JWT 타입이 틀렸습니다."),

@@ -22,48 +22,40 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
-
     private final JwtExceptionFilter jwtExceptionFilter;
 
-    private final AuthenticationConfig authenticationConfig;
-
     private static final String[] ALLOWED_URL = {
-            "/",
-            "/v2/api-docs",
-            "/swagger-resources",
-            "/swagger-resources/**",
-            "/configuration/ui",
-            "/configuration/security",
-            "/swagger-ui.html",
-            "/webjars/**",
-            "/v3/api-docs/**",
-            "/swagger-ui/**",
-            "/owner",
-            "/auth/login"
+        "/",
+        "/v2/api-docs",
+        "/swagger-resources",
+        "/swagger-resources/**",
+        "/configuration/ui",
+        "/configuration/security",
+        "/swagger-ui.html",
+        "/webjars/**",
+        "/v3/api-docs/**",
+        "/swagger-ui/**",
+        "/owner/**",
+        "/auth/login",
+        "/employee/**"
     };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(
-                auth -> {
-                    auth
-                        .requestMatchers(ALLOWED_URL).permitAll()
-                        .anyRequest().hasRole("USER");
-                }
+                auth -> auth
+                    .requestMatchers(ALLOWED_URL).permitAll()
+                    .anyRequest().authenticated() // Require authentication for any request not explicitly permitted
             )
-            .cors(
-                cors -> cors.configurationSource(
-                        corsConfigurationSource()
-                )
-            )
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(CsrfConfigurer::disable)
             .headers(httpSecurityHeadersConfigurer ->
-                    httpSecurityHeadersConfigurer.frameOptions(
-                            HeadersConfigurer.FrameOptionsConfig::disable)
+                httpSecurityHeadersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)
             )
             .addFilterBefore(jwtExceptionFilter, UsernamePasswordAuthenticationFilter.class)
             .addFilterAfter(jwtFilter, JwtExceptionFilter.class);
+
         return http.build();
     }
 
@@ -77,7 +69,4 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
-
-
 }

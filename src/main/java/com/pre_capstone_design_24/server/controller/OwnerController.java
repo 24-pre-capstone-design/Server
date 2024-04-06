@@ -1,15 +1,17 @@
 package com.pre_capstone_design_24.server.controller;
 
 import com.pre_capstone_design_24.server.global.response.Status;
-import com.pre_capstone_design_24.server.requestDto.OwnerRequestDto;
+import com.pre_capstone_design_24.server.requestDto.OwnerCreateRequestDto;
+import com.pre_capstone_design_24.server.requestDto.OwnerUpdateRequestDto;
 import com.pre_capstone_design_24.server.responseDto.OwnerResponseDto;
 import com.pre_capstone_design_24.server.service.OwnerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import com.pre_capstone_design_24.server.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,16 +30,16 @@ public class OwnerController {
     @Operation(summary = "사장님 생성")
     @PostMapping("")
     public ApiResponse<?> createOwner(
-            @RequestBody OwnerRequestDto ownerRequestDto
+        @RequestBody OwnerCreateRequestDto ownerCreateRequestDto
     ) {
-        ownerService.createOwner(ownerRequestDto);
+        ownerService.createOwner(ownerCreateRequestDto);
         return ApiResponse.onSuccess(Status.CREATED.getCode(), Status.CREATED.getMessage(), null);
     }
 
     @Operation(summary = "사장님 조회")
     @GetMapping("/{ownerId}")
     public ApiResponse<?> getOwner(
-            @PathVariable("ownerId") String ownerId
+        @PathVariable("ownerId") String ownerId
     ) {
         OwnerResponseDto ownerResponseDto = ownerService.getOwner(ownerId);
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), ownerResponseDto);
@@ -50,4 +52,25 @@ public class OwnerController {
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), ownerResponseDto);
     }
 
+    @Operation(summary = "사장님 정보 수정")
+    @PatchMapping("/{ownerId}")
+    public ApiResponse<?> updateOwner(
+        @RequestBody OwnerUpdateRequestDto ownerCreateRequestDto,
+        @PathVariable("ownerId") String ownerId
+    ) {
+        boolean isUpdated = ownerService.isUpdateOwner(ownerId, ownerCreateRequestDto);
+        if (!isUpdated) {
+            return ApiResponse.onFailure(Status.UNAUTHORIZED.getCode(), Status.OWNER_PASSWORD_INCORRECT.getMessage(), null);
+        }
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), null);
+    }
+
+    @Operation(summary = "사장님 탈퇴")
+    @DeleteMapping("/{ownerId}")
+    public ApiResponse<?> deleteOwner (
+        @PathVariable("ownerId") String ownerId
+        ) {
+        ownerService.deleteOwner(ownerId);
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), null);
+    }
 }
