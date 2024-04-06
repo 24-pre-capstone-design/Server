@@ -48,4 +48,8 @@ public class OwnerService {
                 .orElseThrow(() -> new GeneralException(Status.OWNER_NOT_FOUND));
     }
 
+    public boolean isOwnerExist(String id) {
+        return ownerRepository.existsById(id);
+    }
+
 }

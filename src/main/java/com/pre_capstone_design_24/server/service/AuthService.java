@@ -8,6 +8,7 @@ import com.pre_capstone_design_24.server.global.response.GeneralException;
 import com.pre_capstone_design_24.server.global.response.Status;
 import com.pre_capstone_design_24.server.repository.OwnerRepository;
 import com.pre_capstone_design_24.server.requestDto.LoginRequestDto;
+import com.pre_capstone_design_24.server.responseDto.IdDuplicateCheckResponseDto;
 import com.pre_capstone_design_24.server.responseDto.JwtResponseDto;
 import java.security.AuthProvider;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthService {
 
-    private final OwnerRepository ownerRepository;
+    private final OwnerService ownerService;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -28,8 +29,7 @@ public class AuthService {
         String id = loginRequestDto.getId();
         String password = loginRequestDto.getPassword();
 
-        Owner member = ownerRepository.findById(id)
-                .orElseThrow(() -> new GeneralException(Status.OWNER_NOT_FOUND));
+        Owner member = ownerService.getOwnerById(id);
 
         if (!passwordEncoder.matches(password, member.getPassword())) {
             throw new GeneralException(Status.OWNER_PASSWORD_INCORRECT);
@@ -40,6 +40,13 @@ public class AuthService {
         return JwtResponseDto.builder()
                 .accessToken(token.getAccessToken())
                 .refreshToken(token.getRefreshToken())
+                .build();
+    }
+
+    public IdDuplicateCheckResponseDto idDuplicateCheck(String id) {
+        boolean isIdExist = ownerService.isOwnerExist(id);
+        return IdDuplicateCheckResponseDto.builder()
+                .isDuplicated(isIdExist)
                 .build();
     }
 
