@@ -27,7 +27,7 @@ public class EmployeeService {
     public void createEmployee(EmployeeRequestDto employeeRequestDto) {
         Owner currentOwner = getCurrentOwner();
         Employee newEmployee = Employee.of(employeeRequestDto, currentOwner);
-        employeeRepository.save(newEmployee);
+        save(newEmployee);
     }
 
     public List<EmployeeResponseDto> getAllEmployees() {
@@ -48,7 +48,7 @@ public class EmployeeService {
         }
 
         employee.update(employeeRequestDto);
-        employeeRepository.save(employee);
+        save(employee);
     }
 
     public void deleteEmployee(Long employeeId) {
@@ -59,13 +59,20 @@ public class EmployeeService {
         if (!employee.getOwner().equals(currentOwner)) {
             throw new GeneralException(Status.UNAUTHORIZED);
         }
-
-        employeeRepository.delete(employee);
+        delete(employee);
     }
 
     private Owner getCurrentOwner() {
         String ownerId = jwtProvider.getUsernameFromAuthentication();
         return ownerRepository.findById(ownerId)
             .orElseThrow(() -> new GeneralException(Status.OWNER_NOT_FOUND));
+    }
+
+    public void save(Employee employee) {
+        employeeRepository.save(employee);
+    }
+
+    private void delete(Employee employee) {
+        employeeRepository.delete(employee);
     }
 }
