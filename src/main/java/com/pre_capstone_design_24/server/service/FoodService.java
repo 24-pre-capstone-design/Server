@@ -21,7 +21,7 @@ public class FoodService {
 
     public void createFood(FoodRequestDto foodRequestDto) {
         Food newFood = Food.of(foodRequestDto);
-        connectWithFoodCategory(newFood);
+        newFood.updateFoodCategory(foodCategoryService.getFoodCategoryById(foodRequestDto.getFoodCategoryId()));
         save(newFood);
     }
 
@@ -33,12 +33,12 @@ public class FoodService {
     public void updateFood(Long id, FoodRequestDto foodRequestDto) {
         Food food = getFoodById(id);
         food.update(foodRequestDto);
+        food.updateFoodCategory(foodCategoryService.getFoodCategoryById(foodRequestDto.getFoodCategoryId()));
         save(food);
     }
 
     public void deleteFood(Long id) {
         Food food = getFoodById(id);
-        disconnectWithFoodCategory(food);
         delete(food);
     }
 
@@ -53,16 +53,6 @@ public class FoodService {
     public Food getFoodById(Long id) {
         return foodRepository.findById(id)
                 .orElseThrow(() -> new GeneralException(Status.FOOD_NOT_FOUND));
-    }
-
-    public void connectWithFoodCategory(Food food) {
-        FoodCategory foodCategory = foodCategoryService.getFoodCategoryById(food.getFoodCategoryId());
-        foodCategory.getFoods().add(food);
-    }
-
-    public void disconnectWithFoodCategory(Food food) {
-        FoodCategory foodCategory = foodCategoryService.getFoodCategoryById(food.getFoodCategoryId());
-        foodCategory.getFoods().remove(food);
     }
 
 }

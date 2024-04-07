@@ -1,5 +1,6 @@
 package com.pre_capstone_design_24.server.requestDto;
 
+import com.pre_capstone_design_24.server.domain.FoodCategory;
 import com.pre_capstone_design_24.server.domain.FoodStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;

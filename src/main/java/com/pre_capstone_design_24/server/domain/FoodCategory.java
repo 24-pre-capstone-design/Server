@@ -26,9 +26,6 @@ public class FoodCategory {
     @NotNull
     String name;
 
-    @OneToMany(mappedBy = "foodCategoryId", cascade = CascadeType.ALL)
-    private List<Food> foods = new ArrayList<>();
-
     public static FoodCategory of(FoodCategoryRequestDto foodCategoryRequestDto) {
         return FoodCategory.builder()
                 .name(foodCategoryRequestDto.getName())

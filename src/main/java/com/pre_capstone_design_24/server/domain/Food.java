@@ -1,6 +1,8 @@
 package com.pre_capstone_design_24.server.domain;
 
+import com.pre_capstone_design_24.server.repository.FoodCategoryRepository;
 import com.pre_capstone_design_24.server.requestDto.FoodRequestDto;
+import com.pre_capstone_design_24.server.service.FoodCategoryService;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -21,7 +23,9 @@ public class Food {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long foodCategoryId;
+    @ManyToOne
+    @JoinColumn(name = "food_category_id")
+    private FoodCategory foodCategory;
 
     @NotNull
     private String name;
@@ -40,8 +44,8 @@ public class Food {
     private LocalDateTime createdAt;
 
     public static Food of(FoodRequestDto foodRequestDto) {
+
         return Food.builder()
-                .foodCategoryId(foodRequestDto.getFoodCategoryId())
                 .name(foodRequestDto.getName())
                 .price(foodRequestDto.getPrice())
                 .pictureURL(foodRequestDto.getPictureURL())
@@ -50,8 +54,8 @@ public class Food {
                 .build();
     }
 
-    public void updateFoodCategoryId(Long foodCategoryId) {
-        this.foodCategoryId = foodCategoryId;
+    public void updateFoodCategory(FoodCategory foodCategory) {
+        this.foodCategory = foodCategory;
     }
 
     public void updateName(String name) {
@@ -75,7 +79,6 @@ public class Food {
     }
 
     public void update(FoodRequestDto foodRequestDto) {
-        updateFoodCategoryId(foodRequestDto.getFoodCategoryId());
         updateName(foodRequestDto.getName());
         updatePrice(foodRequestDto.getPrice());
         updatePictureURL(foodRequestDto.getPictureURL());

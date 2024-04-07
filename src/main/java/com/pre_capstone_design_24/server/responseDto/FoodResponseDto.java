@@ -2,6 +2,7 @@ package com.pre_capstone_design_24.server.responseDto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pre_capstone_design_24.server.domain.Food;
+import com.pre_capstone_design_24.server.domain.FoodCategory;
 import com.pre_capstone_design_24.server.domain.FoodStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +21,7 @@ public class FoodResponseDto {
 
     Long id;
 
-    Long foodCategoryId;
+    FoodCategory foodCategory;
 
     String name;
 
@@ -36,7 +37,7 @@ public class FoodResponseDto {
     public static FoodResponseDto of(Food food) {
         return FoodResponseDto.builder()
                 .id(food.getId())
-                .foodCategoryId(food.getFoodCategoryId())
+                .foodCategory(food.getFoodCategory())
                 .name(food.getName())
                 .price(food.getPrice())
                 .pictureURL(food.getPictureURL())

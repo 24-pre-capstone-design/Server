@@ -5,6 +5,7 @@ import com.pre_capstone_design_24.server.domain.FoodCategory;
 import com.pre_capstone_design_24.server.global.response.GeneralException;
 import com.pre_capstone_design_24.server.global.response.Status;
 import com.pre_capstone_design_24.server.repository.FoodCategoryRepository;
+import com.pre_capstone_design_24.server.repository.FoodRepository;
 import com.pre_capstone_design_24.server.requestDto.FoodCategoryRequestDto;
 import com.pre_capstone_design_24.server.requestDto.FoodRequestDto;
 import com.pre_capstone_design_24.server.responseDto.FoodCategoryResponseDto;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class FoodCategoryService {
 
     private final FoodCategoryRepository foodCategoryRepository;
+    private final FoodRepository foodRepository;
 
     public void createFoodCategory(FoodCategoryRequestDto foodCategoryRequestDto) {
         FoodCategory newFoodCategory = FoodCategory.of(foodCategoryRequestDto);
@@ -54,8 +56,10 @@ public class FoodCategoryService {
     }
 
     public void disconnectWithFood(FoodCategory foodCategory) {
-        for (Food food : foodCategory.getFoods()) {
-            food.updateFoodCategoryId(null);
+        for (Food food : foodRepository.findAll()) {
+            if (food.getFoodCategory().getId().equals(foodCategory.getId())) {
+                food.updateFoodCategory(null);
+            }
         }
     }
 

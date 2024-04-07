@@ -17,13 +17,10 @@ public class FoodCategoryResponseDto {
 
     String name;
 
-    List<Food> foods;
-
     public static FoodCategoryResponseDto of(FoodCategory foodCategory) {
         return FoodCategoryResponseDto.builder()
                 .id(foodCategory.getId())
                 .name(foodCategory.getName())
-                .foods(foodCategory.getFoods())
                 .build();
     }
 
