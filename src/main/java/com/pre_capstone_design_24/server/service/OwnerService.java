@@ -22,6 +22,9 @@ public class OwnerService {
     private final JwtProvider jwtProvider;
 
     public void createOwner(OwnerRequestDto ownerRequestDto) {
+        String id = ownerRequestDto.getId();
+        if (isOwnerExist(id))
+            throw new GeneralException(Status.OWNER_ID_ALREADY_EXISTS);
         Owner newOwner = Owner.of(ownerRequestDto, passwordEncoder);
         save(newOwner);
     }
