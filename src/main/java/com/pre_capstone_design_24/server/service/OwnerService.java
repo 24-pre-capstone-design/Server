@@ -34,11 +34,6 @@ public class OwnerService {
         return OwnerResponseDto.of(owner);
     }
 
-    public OwnerResponseDto getLoginOwner() {
-        Owner owner = getCurrentOwner();
-        return OwnerResponseDto.of(owner);
-    }
-
     public Owner getOwnerById(String id) {
         return ownerRepository.findById(id)
                 .orElseThrow(() -> new GeneralException(Status.OWNER_NOT_FOUND));
