@@ -1,10 +1,17 @@
 package com.pre_capstone_design_24.server.global.response;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -46,6 +53,38 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 HttpHeaders.EMPTY,
                 body.getHttpStatus(),
                 webRequest
+        );
+    }
+
+    @Override
+    public ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException exception,
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request
+    ) {
+        Map<String, String> errors = new LinkedHashMap<>();
+        Body body = Status.BAD_REQUEST.getBody();
+
+        exception.getBindingResult().getFieldErrors()
+                .forEach(fieldError -> {
+                    String fieldName = fieldError.getField();
+                    String errorMessage = Optional.ofNullable(fieldError.getDefaultMessage())
+                            .orElse("");
+                    errors.merge(fieldName, errorMessage,
+                            (existingErrorMessage, newErrorMessage) -> existingErrorMessage + ", "
+                                    + newErrorMessage);
+                });
+
+        ApiResponse<Object> response = ApiResponse.onFailure(body.getCode(), body.getMessage(),
+                errors);
+
+        return super.handleExceptionInternal(
+                exception,
+                response,
+                headers,
+                Status.BAD_REQUEST.getHttpStatus(),
+                request
         );
     }
 
