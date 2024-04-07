@@ -24,5 +24,4 @@ public class OwnerRequestDto {
     @NotNull
     @Schema(description = "사장님 이름", example = "전민주")
     private String name;
-
 }
