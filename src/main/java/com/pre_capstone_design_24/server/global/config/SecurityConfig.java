@@ -25,8 +25,6 @@ public class SecurityConfig {
 
     private final JwtExceptionFilter jwtExceptionFilter;
 
-    private final AuthenticationConfig authenticationConfig;
-
     private static final String[] ALLOWED_URL = {
             "/",
             "/v2/api-docs",
@@ -39,7 +37,8 @@ public class SecurityConfig {
             "/v3/api-docs/**",
             "/swagger-ui/**",
             "/owner",
-            "/auth/login"
+            "/auth/login",
+            "/resources/files/**"
     };
 
     @Bean

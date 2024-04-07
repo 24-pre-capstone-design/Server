@@ -30,6 +30,9 @@ public enum Status {
     JWT_NULL(HttpStatus.UNAUTHORIZED, "JWT401", "JWT가 NULL입니다."),
     JWT_INVALID(HttpStatus.FORBIDDEN, "JWT403", "JWT가 유효하지 않습니다."),
 
+    // File 오류 응답
+    FILE_NOT_FOUND_IN_DB(HttpStatus.NOT_FOUND, "FILE_DB404", "파일정보가 DB에 존재하지 않습니다."),
+    FILE_NOT_FOUND_IN_STORAGE(HttpStatus.NOT_FOUND, "FILE_STORAGE404", "파일이 존재하지 않습니다.")
     ;
 
     private final HttpStatus httpStatus;
