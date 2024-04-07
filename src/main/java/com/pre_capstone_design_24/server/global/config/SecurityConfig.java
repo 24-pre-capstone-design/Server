@@ -25,22 +25,21 @@ public class SecurityConfig {
 
     private final JwtExceptionFilter jwtExceptionFilter;
 
-    private final AuthenticationConfig authenticationConfig;
-
     private static final String[] ALLOWED_URL = {
-            "/",
-            "/v2/api-docs",
-            "/swagger-resources",
-            "/swagger-resources/**",
-            "/configuration/ui",
-            "/configuration/security",
-            "/swagger-ui.html",
-            "/webjars/**",
-            "/v3/api-docs/**",
-            "/swagger-ui/**",
-            "/owner",
-            "/auth/login",
-            "/auth/id-duplicate-check"
+        "/",
+        "/v2/api-docs",
+        "/swagger-resources",
+        "/swagger-resources/**",
+        "/configuration/ui",
+        "/configuration/security",
+        "/swagger-ui.html",
+        "/webjars/**",
+        "/v3/api-docs/**",
+        "/swagger-ui/**",
+        "/owner",
+        "/auth/login",
+        "/resources/files/**".
+        "/auth/id-duplicate-check"
     };
 
     @Bean
@@ -55,13 +54,13 @@ public class SecurityConfig {
             )
             .cors(
                 cors -> cors.configurationSource(
-                        corsConfigurationSource()
+                    corsConfigurationSource()
                 )
             )
             .csrf(CsrfConfigurer::disable)
             .headers(httpSecurityHeadersConfigurer ->
-                    httpSecurityHeadersConfigurer.frameOptions(
-                            HeadersConfigurer.FrameOptionsConfig::disable)
+                httpSecurityHeadersConfigurer.frameOptions(
+                    HeadersConfigurer.FrameOptionsConfig::disable)
             )
             .addFilterBefore(jwtExceptionFilter, UsernamePasswordAuthenticationFilter.class)
             .addFilterAfter(jwtFilter, JwtExceptionFilter.class);

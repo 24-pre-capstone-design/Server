@@ -7,7 +7,6 @@ import com.pre_capstone_design_24.server.global.response.Status;
 import com.pre_capstone_design_24.server.repository.OwnerRepository;
 import com.pre_capstone_design_24.server.requestDto.OwnerRequestDto;
 import com.pre_capstone_design_24.server.responseDto.OwnerResponseDto;
-import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,7 @@ public class OwnerService {
 
     public void createOwner(OwnerRequestDto ownerRequestDto) {
         Owner newOwner = Owner.of(ownerRequestDto, passwordEncoder);
-        ownerRepository.save(newOwner);
+        save(newOwner);
     }
 
     public OwnerResponseDto getOwner(String id) {
@@ -48,8 +47,34 @@ public class OwnerService {
                 .orElseThrow(() -> new GeneralException(Status.OWNER_NOT_FOUND));
     }
 
+
     public boolean isOwnerExist(String id) {
         return ownerRepository.existsById(id);
     }
 
+
+    public void UpdateOwner(String id, OwnerRequestDto ownerRequestDto) {
+        Owner owner = ownerRepository.findById(id)
+            .orElseThrow(() -> new GeneralException(Status.OWNER_NOT_FOUND));
+
+        owner.update(ownerRequestDto, passwordEncoder);
+
+        save(owner);
+    }
+
+    public void save(Owner owner) {
+        ownerRepository.save(owner);
+    }
+
+    public OwnerResponseDto deleteOwner(String ownerId) {
+        Owner owner = ownerRepository.findById(ownerId)
+            .orElseThrow(() -> new GeneralException(Status.OWNER_NOT_FOUND));
+        delete(owner);
+        return null;
+    }
+
+    private void delete(Owner owner) {
+        ownerRepository.delete(owner);
+    }
 }
+
