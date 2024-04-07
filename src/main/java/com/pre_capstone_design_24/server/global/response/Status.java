@@ -24,6 +24,12 @@ public enum Status {
     OWNER_NOT_FOUND(HttpStatus.NOT_FOUND, "OWNER404", "사장님이 존재하지 않습니다."),
     OWNER_PASSWORD_INCORRECT(HttpStatus.BAD_REQUEST, "OWNER400", "비밀번호가 틀렸습니다."),
 
+    //Food 오류 응답
+    FOOD_NOT_FOUND(HttpStatus.NOT_FOUND, "FOOD404", "음식이 존재하지 않습니다."),
+
+    //FoodCategory 오류 응답
+    FOOD_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "FOOD_CATEGORY404", "음식 카테고리가 존재하지 않습니다."),
+    
     //JWT 오류 응답
     JWT_WRONG_TYPE_TOKEN(HttpStatus.BAD_REQUEST, "JWT400", "JWT 타입이 틀렸습니다."),
     JWT_EXPIRED_TOKEN(HttpStatus.BAD_REQUEST, "JWT400", "JWT가 만료되었습니다."),
