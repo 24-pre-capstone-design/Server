@@ -22,6 +22,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
+
     private final JwtExceptionFilter jwtExceptionFilter;
 
     private static final String[] ALLOWED_URL = {
@@ -35,27 +36,33 @@ public class SecurityConfig {
         "/webjars/**",
         "/v3/api-docs/**",
         "/swagger-ui/**",
-        "/owner/**",
+        "/owner",
         "/auth/login",
-        "/employee/**"
+        "/resources/files/**"
     };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(
-                auth -> auth
-                    .requestMatchers(ALLOWED_URL).permitAll()
-                    .anyRequest().authenticated() // Require authentication for any request not explicitly permitted
+                auth -> {
+                    auth
+                        .requestMatchers(ALLOWED_URL).permitAll()
+                        .anyRequest().hasRole("USER");
+                }
             )
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            .cors(
+                cors -> cors.configurationSource(
+                    corsConfigurationSource()
+                )
+            )
             .csrf(CsrfConfigurer::disable)
             .headers(httpSecurityHeadersConfigurer ->
-                httpSecurityHeadersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)
+                httpSecurityHeadersConfigurer.frameOptions(
+                    HeadersConfigurer.FrameOptionsConfig::disable)
             )
             .addFilterBefore(jwtExceptionFilter, UsernamePasswordAuthenticationFilter.class)
             .addFilterAfter(jwtFilter, JwtExceptionFilter.class);
-
         return http.build();
     }
 
@@ -69,4 +76,7 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
+
+
 }

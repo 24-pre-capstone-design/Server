@@ -23,9 +23,9 @@ public class EmployeeRequestDto {
     private String phoneNumber;
 
     @Schema(description = "근무 상태", example = "WORKING")
-    private EmployeeStatus status; // 근무 상태 필드 추가
+    private EmployeeStatus status;
 
     @NotNull
     @Schema(description = "근무 날짜", example = "월화수")
-    private String workDate;    //근무 날짜 얘기가 나왔던거 같아서 추가했어요 필요없으면 빼도 됩니다.
+    private String workDate;
 }

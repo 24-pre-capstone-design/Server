@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OwnerCreateRequestDto {
+public class OwnerRequestDto {
 
     @NotNull
     @Schema(description = "아이디", example = "mingmingmon")

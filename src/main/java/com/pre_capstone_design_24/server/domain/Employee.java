@@ -7,6 +7,9 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,22 +26,30 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private String name;
 
     private String phoneNumber;
 
+    @NotNull
     private String workDate;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     private EmployeeStatus status;
 
-    // Assume EmployeeRequestDto has similar fields to OwnerCreateRequestDto, but fitting for Employee
-    public static Employee of(EmployeeRequestDto requestDto) {
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private Owner owner;
+
+    public static Employee of(EmployeeRequestDto requestDto, Owner owner) {
         return Employee.builder()
             .name(requestDto.getName())
             .phoneNumber(requestDto.getPhoneNumber())
             .workDate(requestDto.getWorkDate())
             .status(requestDto.getStatus())
+            .owner(owner)
             .build();
     }
 
@@ -46,6 +57,6 @@ public class Employee {
         this.name = requestDto.getName();
         this.phoneNumber = requestDto.getPhoneNumber();
         this.workDate = requestDto.getWorkDate();
-        this.status = requestDto.getStatus(); // Assuming EmployeeRequestDto includes status
+        this.status = requestDto.getStatus();
     }
 }

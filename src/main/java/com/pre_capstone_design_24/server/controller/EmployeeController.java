@@ -1,14 +1,11 @@
 package com.pre_capstone_design_24.server.controller;
 
-import com.pre_capstone_design_24.server.domain.EmployeeStatus;
 import com.pre_capstone_design_24.server.global.response.ApiResponse;
 import com.pre_capstone_design_24.server.global.response.Status;
 import com.pre_capstone_design_24.server.requestDto.EmployeeRequestDto;
-import com.pre_capstone_design_24.server.responseDto.EmployeeResponseDto;
 import com.pre_capstone_design_24.server.service.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

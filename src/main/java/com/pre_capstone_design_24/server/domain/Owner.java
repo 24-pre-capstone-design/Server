@@ -1,14 +1,15 @@
 package com.pre_capstone_design_24.server.domain;
 
-import com.pre_capstone_design_24.server.requestDto.OwnerCreateRequestDto;
-import com.pre_capstone_design_24.server.requestDto.OwnerUpdateRequestDto;
+import com.pre_capstone_design_24.server.requestDto.OwnerRequestDto;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
-import jakarta.persistence.Transient;
+import jakarta.persistence.OneToMany;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,8 +38,8 @@ public class Owner implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Transient
-    private String newPassword;
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
+    private List<Employee> employees;
 
     public Owner(String id, String password, Role role) {
         this.id = id;
@@ -46,22 +47,13 @@ public class Owner implements UserDetails {
         this.role = role;
     }
 
-    public static Owner of(OwnerCreateRequestDto ownerCreateRequestDto, PasswordEncoder passwordEncoder) {
+    public static Owner of(OwnerRequestDto ownerRequestDto, PasswordEncoder passwordEncoder) {
         return Owner.builder()
-                .id(ownerCreateRequestDto.getId())
-                .password(passwordEncoder.encode(ownerCreateRequestDto.getPassword()))
-                .name(ownerCreateRequestDto.getName())
+                .id(ownerRequestDto.getId())
+                .password(passwordEncoder.encode(ownerRequestDto.getPassword()))
+                .name(ownerRequestDto.getName())
                 .role(Role.USER)
                 .build();
-    }
-
-    public static Owner updateOf(OwnerUpdateRequestDto ownerUpdateRequestDto, PasswordEncoder passwordEncoder) {
-        return Owner.builder()
-            .id(ownerUpdateRequestDto.getId())
-            .password(passwordEncoder.encode(ownerUpdateRequestDto.getPassword()))
-            .name(ownerUpdateRequestDto.getName())
-            .role(Role.USER)
-            .build();
     }
 
     @Override
@@ -94,11 +86,12 @@ public class Owner implements UserDetails {
         return false;
     }
 
-    public void updateName(String name) {
-        this.name = name;
-    }
-
-    public void update(OwnerUpdateRequestDto ownerCreateRequestDto) {
-        updateName(ownerCreateRequestDto.getName());
-    }
+    public void update(OwnerRequestDto ownerRequestDto, PasswordEncoder passwordEncoder) {
+            if (ownerRequestDto.getName() != null) {
+                this.name = ownerRequestDto.getName();
+            }
+            if (ownerRequestDto.getPassword() != null && !ownerRequestDto.getPassword().isEmpty()) {
+                this.password = passwordEncoder.encode(ownerRequestDto.getPassword());
+            }
+        }
 }

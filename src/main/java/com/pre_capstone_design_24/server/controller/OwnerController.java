@@ -1,8 +1,7 @@
 package com.pre_capstone_design_24.server.controller;
 
 import com.pre_capstone_design_24.server.global.response.Status;
-import com.pre_capstone_design_24.server.requestDto.OwnerCreateRequestDto;
-import com.pre_capstone_design_24.server.requestDto.OwnerUpdateRequestDto;
+import com.pre_capstone_design_24.server.requestDto.OwnerRequestDto;
 import com.pre_capstone_design_24.server.responseDto.OwnerResponseDto;
 import com.pre_capstone_design_24.server.service.OwnerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,9 +29,9 @@ public class OwnerController {
     @Operation(summary = "사장님 생성")
     @PostMapping("")
     public ApiResponse<?> createOwner(
-        @RequestBody OwnerCreateRequestDto ownerCreateRequestDto
+        @RequestBody OwnerRequestDto ownerRequestDto
     ) {
-        ownerService.createOwner(ownerCreateRequestDto);
+        ownerService.createOwner(ownerRequestDto);
         return ApiResponse.onSuccess(Status.CREATED.getCode(), Status.CREATED.getMessage(), null);
     }
 
@@ -55,13 +54,10 @@ public class OwnerController {
     @Operation(summary = "사장님 정보 수정")
     @PatchMapping("/{ownerId}")
     public ApiResponse<?> updateOwner(
-        @RequestBody OwnerUpdateRequestDto ownerCreateRequestDto,
+        @RequestBody OwnerRequestDto ownerRequestDto,
         @PathVariable("ownerId") String ownerId
     ) {
-        boolean isUpdated = ownerService.isUpdateOwner(ownerId, ownerCreateRequestDto);
-        if (!isUpdated) {
-            return ApiResponse.onFailure(Status.UNAUTHORIZED.getCode(), Status.OWNER_PASSWORD_INCORRECT.getMessage(), null);
-        }
+        ownerService.UpdateOwner(ownerId, ownerRequestDto);
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), null);
     }
 
