@@ -20,18 +20,16 @@ public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
-    private final OwnerRepository ownerRepository;
-
-    private final JwtProvider jwtProvider;
+    private final OwnerService ownerService;
 
     public void createEmployee(EmployeeRequestDto employeeRequestDto) {
-        Owner currentOwner = getCurrentOwner();
+        Owner currentOwner = ownerService.getCurrentOwner();
         Employee newEmployee = Employee.of(employeeRequestDto, currentOwner);
         save(newEmployee);
     }
 
     public List<EmployeeResponseDto> getAllEmployees() {
-        Owner currentOwner = getCurrentOwner();
+        Owner currentOwner = ownerService.getCurrentOwner();
         List<Employee> employees = employeeRepository.findAllByOwner(currentOwner);
         return employees.stream()
             .map(EmployeeResponseDto::of)
@@ -39,7 +37,7 @@ public class EmployeeService {
     }
 
     public void updateEmployee(Long employeeId, EmployeeRequestDto employeeRequestDto) {
-        Owner currentOwner = getCurrentOwner();
+        Owner currentOwner = ownerService.getCurrentOwner();
         Employee employee = employeeRepository.findById(employeeId)
             .orElseThrow(() -> new GeneralException(Status.EMPLOYEE_NOT_FOUND));
 
@@ -52,7 +50,7 @@ public class EmployeeService {
     }
 
     public void deleteEmployee(Long employeeId) {
-        Owner currentOwner = getCurrentOwner();
+        Owner currentOwner = ownerService.getCurrentOwner();
         Employee employee = employeeRepository.findById(employeeId)
             .orElseThrow(() -> new GeneralException(Status.EMPLOYEE_NOT_FOUND));
 
@@ -62,12 +60,6 @@ public class EmployeeService {
         delete(employee);
     }
 
-    private Owner getCurrentOwner() {
-        String ownerId = jwtProvider.getUsernameFromAuthentication();
-        return ownerRepository.findById(ownerId)
-            .orElseThrow(() -> new GeneralException(Status.OWNER_NOT_FOUND));
-    }
-
     public void save(Employee employee) {
         employeeRepository.save(employee);
     }
@@ -75,4 +67,5 @@ public class EmployeeService {
     private void delete(Employee employee) {
         employeeRepository.delete(employee);
     }
+
 }
