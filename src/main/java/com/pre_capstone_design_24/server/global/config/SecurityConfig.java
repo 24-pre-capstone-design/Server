@@ -38,7 +38,8 @@ public class SecurityConfig {
         "/swagger-ui/**",
         "/owner",
         "/auth/login",
-        "/resources/files/**"
+        "/resources/files/**".
+        "/auth/id-duplicate-check"
     };
 
     @Bean

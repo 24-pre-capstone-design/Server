@@ -1,5 +1,6 @@
 package com.pre_capstone_design_24.server.requestDto;
 
+import com.pre_capstone_design_24.server.domain.Password;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ public class OwnerRequestDto {
     @Schema(description = "아이디", example = "mingmingmon")
     private String id;
 
+    @Password
     @NotNull
     @Schema(description = "비밀번호", example = "1234")
     private String password;

@@ -47,6 +47,12 @@ public class OwnerService {
                 .orElseThrow(() -> new GeneralException(Status.OWNER_NOT_FOUND));
     }
 
+
+    public boolean isOwnerExist(String id) {
+        return ownerRepository.existsById(id);
+    }
+
+
     public void UpdateOwner(String id, OwnerRequestDto ownerRequestDto) {
         Owner owner = ownerRepository.findById(id)
             .orElseThrow(() -> new GeneralException(Status.OWNER_NOT_FOUND));
@@ -71,3 +77,4 @@ public class OwnerService {
         ownerRepository.delete(owner);
     }
 }
+

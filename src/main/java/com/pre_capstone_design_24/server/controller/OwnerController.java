@@ -7,6 +7,7 @@ import com.pre_capstone_design_24.server.service.OwnerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import com.pre_capstone_design_24.server.global.response.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +30,8 @@ public class OwnerController {
     @Operation(summary = "사장님 생성")
     @PostMapping("")
     public ApiResponse<?> createOwner(
-        @RequestBody OwnerRequestDto ownerRequestDto
+      @RequestBody @Valid OwnerRequestDto ownerRequestDto
+
     ) {
         ownerService.createOwner(ownerRequestDto);
         return ApiResponse.onSuccess(Status.CREATED.getCode(), Status.CREATED.getMessage(), null);
