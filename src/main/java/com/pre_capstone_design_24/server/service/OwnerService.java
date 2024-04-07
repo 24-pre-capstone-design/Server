@@ -50,18 +50,14 @@ public class OwnerService {
                 .orElseThrow(() -> new GeneralException(Status.OWNER_NOT_FOUND));
     }
 
-
     public boolean isOwnerExist(String id) {
         return ownerRepository.existsById(id);
     }
 
-
     public void UpdateOwner(String id, OwnerRequestDto ownerRequestDto) {
         Owner owner = ownerRepository.findById(id)
             .orElseThrow(() -> new GeneralException(Status.OWNER_NOT_FOUND));
-
         owner.update(ownerRequestDto, passwordEncoder);
-
         save(owner);
     }
 
@@ -69,15 +65,15 @@ public class OwnerService {
         ownerRepository.save(owner);
     }
 
-    public OwnerResponseDto deleteOwner(String ownerId) {
+    public void deleteOwner(String ownerId) {
         Owner owner = ownerRepository.findById(ownerId)
             .orElseThrow(() -> new GeneralException(Status.OWNER_NOT_FOUND));
         delete(owner);
-        return null;
     }
 
     private void delete(Owner owner) {
         ownerRepository.delete(owner);
     }
+
 }
 
