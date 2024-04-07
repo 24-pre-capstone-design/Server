@@ -57,7 +57,7 @@ public class FoodCategoryService {
 
     public void disconnectWithFood(FoodCategory foodCategory) {
         for (Food food : foodRepository.findAll()) {
-            if (food.getFoodCategory().getId().equals(foodCategory.getId())) {
+            if (food.getFoodCategory() != null && food.getFoodCategory().getId().equals(foodCategory.getId())) {
                 food.updateFoodCategory(null);
             }
         }
