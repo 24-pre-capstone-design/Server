@@ -8,8 +8,10 @@ import com.pre_capstone_design_24.server.global.response.GeneralException;
 import com.pre_capstone_design_24.server.global.response.Status;
 import com.pre_capstone_design_24.server.repository.OwnerRepository;
 import com.pre_capstone_design_24.server.requestDto.LoginRequestDto;
+import com.pre_capstone_design_24.server.requestDto.PasswordCheckRequestDto;
 import com.pre_capstone_design_24.server.responseDto.IdDuplicateCheckResponseDto;
 import com.pre_capstone_design_24.server.responseDto.JwtResponseDto;
+import com.pre_capstone_design_24.server.responseDto.PasswordCheckResponseDto;
 import java.security.AuthProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,9 +31,9 @@ public class AuthService {
         String id = loginRequestDto.getId();
         String password = loginRequestDto.getPassword();
 
-        Owner member = ownerService.getOwnerById(id);
+        Owner owner = ownerService.getOwnerById(id);
 
-        if (!passwordEncoder.matches(password, member.getPassword())) {
+        if (!passwordEncoder.matches(password, owner.getPassword())) {
             throw new GeneralException(Status.OWNER_PASSWORD_INCORRECT);
         }
 
@@ -47,6 +49,15 @@ public class AuthService {
         boolean isIdExist = ownerService.isOwnerExist(id);
         return IdDuplicateCheckResponseDto.builder()
                 .isDuplicated(isIdExist)
+                .build();
+    }
+
+    public PasswordCheckResponseDto passwordCheck(PasswordCheckRequestDto passwordCheckRequestDto) {
+        Owner owner = ownerService.getCurrentOwner();
+        String currentPassword = passwordCheckRequestDto.getCurrentPassword();
+        boolean isPasswordCorrect = passwordEncoder.matches(currentPassword, owner.getPassword());
+        return PasswordCheckResponseDto.builder()
+                .isPasswordCorrect(isPasswordCorrect)
                 .build();
     }
 

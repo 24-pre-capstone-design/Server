@@ -3,10 +3,13 @@ package com.pre_capstone_design_24.server.controller;
 import com.pre_capstone_design_24.server.global.response.ApiResponse;
 import com.pre_capstone_design_24.server.global.response.Status;
 import com.pre_capstone_design_24.server.requestDto.LoginRequestDto;
+import com.pre_capstone_design_24.server.requestDto.PasswordCheckRequestDto;
 import com.pre_capstone_design_24.server.responseDto.IdDuplicateCheckResponseDto;
 import com.pre_capstone_design_24.server.responseDto.JwtResponseDto;
+import com.pre_capstone_design_24.server.responseDto.PasswordCheckResponseDto;
 import com.pre_capstone_design_24.server.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
+@Tag(name = "auth", description = "인증 관련 api")
 public class AuthController {
 
     private final AuthService authService;
@@ -38,6 +42,16 @@ public class AuthController {
         IdDuplicateCheckResponseDto idDuplicateCheckResponseDto = authService.idDuplicateCheck(id);
         return ApiResponse.onSuccess(Status.OK.getCode(),
                 Status.OK.getMessage(), idDuplicateCheckResponseDto);
+    }
+
+    @PostMapping("/password-check")
+    @Operation(summary = "비밀번호 인증")
+    public ApiResponse<?> passwordCheck (
+            @RequestBody PasswordCheckRequestDto passwordCheckRequestDto
+    ) {
+        PasswordCheckResponseDto passwordCheckResponseDto = authService.passwordCheck(passwordCheckRequestDto);
+        return ApiResponse.onSuccess(Status.OK.getCode(),
+                Status.OK.getMessage(), passwordCheckResponseDto);
     }
 
 }
