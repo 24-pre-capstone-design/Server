@@ -13,6 +13,8 @@ import com.pre_capstone_design_24.server.responseDto.FoodResponseDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Service
 public class FoodCategoryService {
@@ -53,6 +55,13 @@ public class FoodCategoryService {
     public FoodCategory getFoodCategoryById(Long id) {
         return foodCategoryRepository.findById(id)
                 .orElseThrow(() -> new GeneralException(Status.FOOD_CATEGORY_NOT_FOUND));
+    }
+
+    public List<FoodCategoryResponseDto> getAllFoodCategories() {
+        List<FoodCategory> foodCategories = foodCategoryRepository.findAll();
+        return foodCategories.stream()
+                .map(foodCategory -> FoodCategoryResponseDto.of(foodCategory))
+                .toList();
     }
 
     public void disconnectWithFood(FoodCategory foodCategory) {

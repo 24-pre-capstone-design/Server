@@ -1,20 +1,15 @@
 package com.pre_capstone_design_24.server.controller;
 
-import com.pre_capstone_design_24.server.domain.FoodCategory;
 import com.pre_capstone_design_24.server.global.response.ApiResponse;
 import com.pre_capstone_design_24.server.global.response.Status;
-import com.pre_capstone_design_24.server.repository.FoodCategoryRepository;
 import com.pre_capstone_design_24.server.requestDto.FoodCategoryRequestDto;
-import com.pre_capstone_design_24.server.requestDto.FoodRequestDto;
 import com.pre_capstone_design_24.server.responseDto.FoodCategoryResponseDto;
-import com.pre_capstone_design_24.server.responseDto.FoodResponseDto;
 import com.pre_capstone_design_24.server.service.FoodCategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -24,7 +19,6 @@ import java.util.List;
 public class FoodCategoryController {
 
     private final FoodCategoryService foodCategoryService;
-    private final FoodCategoryRepository foodCategoryRepository;
 
     @Operation(summary = "음식 카테고리 생성")
     @PostMapping("")
@@ -66,10 +60,7 @@ public class FoodCategoryController {
     @Operation(summary = "전체 음식 카테고리 조회")
     @GetMapping("")
     public ApiResponse<List<FoodCategoryResponseDto>> getAllFoodCategories() {
-        List<FoodCategoryResponseDto> foodCategoryResponseDtos = new ArrayList<>();
-        for (FoodCategory foodCategory : foodCategoryRepository.findAll()) {
-            foodCategoryResponseDtos.add(FoodCategoryResponseDto.of(foodCategory));
-        }
+        List<FoodCategoryResponseDto> foodCategoryResponseDtos = foodCategoryService.getAllFoodCategories();
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), foodCategoryResponseDtos);
     }
 

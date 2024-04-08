@@ -11,6 +11,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Service
 @Slf4j
@@ -53,6 +55,26 @@ public class FoodService {
     public Food getFoodById(Long id) {
         return foodRepository.findById(id)
                 .orElseThrow(() -> new GeneralException(Status.FOOD_NOT_FOUND));
+    }
+
+    public List<FoodResponseDto> getAllFoods() {
+        List<Food> foods = foodRepository.findAll();
+        return foods.stream()
+                .map(food -> FoodResponseDto.of(food))
+                .toList();
+    }
+
+    public List<FoodResponseDto> getFoodsByFoodCategoryId(Long foodCategoryId) {
+        FoodCategory foodCategory = null;
+
+        if (foodCategoryId != null) {
+             foodCategory = foodCategoryService.getFoodCategoryById(foodCategoryId);
+        }
+
+        List<Food> foods = foodRepository.findByFoodCategory(foodCategory);
+        return foods.stream()
+                .map(food -> FoodResponseDto.of(food))
+                .toList();
     }
 
 }
