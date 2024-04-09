@@ -39,7 +39,8 @@ public class SecurityConfig {
         "/owner",
         "/auth/login",
         "/resources/files/**",
-        "/auth/id-duplicate-check"
+        "/auth/id-duplicate-check",
+        "/payment/**",
     };
 
     @Bean
