@@ -7,14 +7,18 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import jdk.jfr.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @Getter
@@ -27,12 +31,14 @@ public class OrderHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "food_list")
-    private List<Food> foodList = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "payment_id")
+    private Payment payment;
 
+    @OneToMany(mappedBy = "orderHistory")
+    private List<Order> orderList = new ArrayList<>();
+
+    @CreationTimestamp
     private LocalDateTime createdAt;
-
-
 
 }

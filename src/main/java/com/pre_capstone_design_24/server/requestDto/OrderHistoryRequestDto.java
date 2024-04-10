@@ -15,7 +15,11 @@ import lombok.NoArgsConstructor;
 public class OrderHistoryRequestDto {
 
     @NotNull
+    @Schema(description = "결제 아이디")
+    Long paymentId;
+
+    @NotNull
     @Schema(description = "음식 아이디 리스트")
-    List<Long> foodId;
+    List<OrderRequestDto> orderRequestDtoList;
 
 }
