@@ -47,4 +47,8 @@ public class OrderHistory {
     @CreatedDate
     private LocalDateTime createdAt;
 
+    public void updateOrderHistoryStatus(OrderHistoryStatus orderHistoryStatus) {
+        this.orderHistoryStatus = orderHistoryStatus;
+    }
+
 }

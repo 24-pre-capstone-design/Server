@@ -42,26 +42,43 @@ public class OrderHistoryService {
         save(orderHistory);
     }
 
+    public OrderHistoryResponseDto getOrderHistory(Long orderHistoryId) {
+        OrderHistory orderHistory = getOrderHistoryById(orderHistoryId);
+        return makeOrderHistoryResponseDto(orderHistory);
+    }
+
+    public void updateOrderHistoryStatus(Long orderHistoryId, OrderHistoryStatus orderHistoryStatus) {
+        OrderHistory orderHistory = getOrderHistoryById(orderHistoryId);
+        orderHistory.updateOrderHistoryStatus(orderHistoryStatus);
+        save(orderHistory);
+    }
+
     public List<OrderHistoryResponseDto> getOrderHistoryByPaymentId(Long paymentId) {
         if (!paymentService.isPaymentExist(paymentId))
             throw new GeneralException(Status.PAYMENT_NOT_FOUND);
-
         List<OrderHistory> orderHistoryList = findOrderHistoryByPaymentId(paymentId);
-
         List<OrderHistoryResponseDto> orderHistoryResponseDtoList = new ArrayList<>();
-
         for (OrderHistory history : orderHistoryList) {
-            List<OrderResponseDto> orderResponseDtoList = orderService.toOrderResponseList(history.getOrderList());
-            OrderHistoryResponseDto orderHistoryResponseDto = OrderHistoryResponseDto.builder()
-                    .paymentId(paymentId)
-                    .orderResponseDtoList(orderResponseDtoList)
-                    .orderHistoryStatus(history.getOrderHistoryStatus())
-                    .orderedAt(history.getCreatedAt())
-                    .build();
+            OrderHistoryResponseDto orderHistoryResponseDto = makeOrderHistoryResponseDto(history);
             orderHistoryResponseDtoList.add(orderHistoryResponseDto);
         }
-
         return orderHistoryResponseDtoList;
+    }
+
+    public OrderHistoryResponseDto makeOrderHistoryResponseDto(OrderHistory orderHistory) {
+        List<OrderResponseDto> orderResponseDtoList = orderService.toOrderResponseList(orderHistory.getOrderList());
+        OrderHistoryResponseDto orderHistoryResponseDto = OrderHistoryResponseDto.builder()
+                .paymentId(orderHistory.getPayment().getId())
+                .orderResponseDtoList(orderResponseDtoList)
+                .orderHistoryStatus(orderHistory.getOrderHistoryStatus())
+                .orderedAt(orderHistory.getCreatedAt())
+                .build();
+        return orderHistoryResponseDto;
+    }
+
+    public OrderHistory getOrderHistoryById(Long id) {
+        return orderHistoryRepository.findById(id)
+                .orElseThrow(() -> new GeneralException(Status.ORDERHISTORY_NOT_FOUND));
     }
 
     public List<OrderHistory> findOrderHistoryByPaymentId(Long paymentId) {
