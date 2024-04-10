@@ -3,6 +3,8 @@ package com.pre_capstone_design_24.server.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pre_capstone_design_24.server.requestDto.OrderHistoryRequestDto;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -38,6 +40,9 @@ public class OrderHistory {
 
     @OneToMany(mappedBy = "orderHistory")
     private List<Order> orderList = new ArrayList<>();
+
+    @Enumerated(value = EnumType.STRING)
+    private OrderHistoryStatus orderHistoryStatus;
 
     @CreatedDate
     private LocalDateTime createdAt;

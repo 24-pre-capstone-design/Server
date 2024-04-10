@@ -2,6 +2,7 @@ package com.pre_capstone_design_24.server.service;
 
 import com.pre_capstone_design_24.server.domain.Order;
 import com.pre_capstone_design_24.server.domain.OrderHistory;
+import com.pre_capstone_design_24.server.domain.OrderHistoryStatus;
 import com.pre_capstone_design_24.server.global.response.GeneralException;
 import com.pre_capstone_design_24.server.global.response.Status;
 import com.pre_capstone_design_24.server.repository.OrderHistoryRepository;
@@ -33,6 +34,7 @@ public class OrderHistoryService {
         OrderHistory orderHistory = OrderHistory.builder()
                 .payment(paymentService.findPaymentById(paymentId))
                 .orderList(orders)
+                .orderHistoryStatus(OrderHistoryStatus.NEW)
                 .build();
 
         orderService.setOrderHistoryId(orders, orderHistory);
@@ -53,6 +55,7 @@ public class OrderHistoryService {
             OrderHistoryResponseDto orderHistoryResponseDto = OrderHistoryResponseDto.builder()
                     .paymentId(paymentId)
                     .orderResponseDtoList(orderResponseDtoList)
+                    .orderHistoryStatus(history.getOrderHistoryStatus())
                     .orderedAt(history.getCreatedAt())
                     .build();
             orderHistoryResponseDtoList.add(orderHistoryResponseDto);
