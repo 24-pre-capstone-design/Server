@@ -47,6 +47,10 @@ public enum Status {
 
     // Payment 오류 응답
     PAYMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "PAYMENT_404", "결제정보가 존재하지 않습니다."),
+
+    // OrderHistory 오류 응답
+    ORDERHISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "ORDERHISTORY404", "주문내역이 존재하지 않습니다."),
+
     ;
 
     private final HttpStatus httpStatus;

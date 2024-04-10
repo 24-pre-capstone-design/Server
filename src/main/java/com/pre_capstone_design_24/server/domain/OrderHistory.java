@@ -1,5 +1,6 @@
 package com.pre_capstone_design_24.server.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pre_capstone_design_24.server.requestDto.OrderHistoryRequestDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -38,7 +39,7 @@ public class OrderHistory {
     @OneToMany(mappedBy = "orderHistory")
     private List<Order> orderList = new ArrayList<>();
 
-    @CreationTimestamp
+    @CreatedDate
     private LocalDateTime createdAt;
 
 }

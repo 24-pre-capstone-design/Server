@@ -27,4 +27,8 @@ public class PaymentService {
                 .orElseThrow(() -> new GeneralException(Status.PAYMENT_NOT_FOUND));
     }
 
+    public boolean isPaymentExist(Long id) {
+        return paymentRepository.existsById(id);
+    }
+
 }

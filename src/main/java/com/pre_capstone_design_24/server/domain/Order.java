@@ -43,7 +43,7 @@ public class Order {
         this.orderHistory = orderHistory;
     }
 
-    private int getTotalCost() {
+    public int getSumOfCost() {
         return food.getPrice() * quantity;
     }
 

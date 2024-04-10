@@ -18,7 +18,7 @@ public class LoginRequestDto {
     private String id;
 
     @NotNull
-    @Schema(description = "비밀번호", example = "1234")
+    @Schema(description = "비밀번호", example = "1234asdf!")
     private String password;
 
 }
