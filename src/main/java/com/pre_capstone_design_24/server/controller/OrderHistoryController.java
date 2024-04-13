@@ -59,5 +59,13 @@ public class OrderHistoryController {
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), orderHistoryResponseDtoList);
     }
 
+    @Operation(summary = "최신순으로 주문내역 전체 조회")
+    @GetMapping("/latest")
+    public ApiResponse<?> getOrderHistoryOrderByLatest() {
+        List<OrderHistoryResponseDto> orderHistoryResponseDtoList = orderHistoryService.getOrderHistoryOrderByLatest();
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), orderHistoryResponseDtoList);
+    }
+
+
 
 }

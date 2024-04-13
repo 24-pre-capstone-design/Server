@@ -57,6 +57,15 @@ public class OrderHistoryService {
         if (!paymentService.isPaymentExist(paymentId))
             throw new GeneralException(Status.PAYMENT_NOT_FOUND);
         List<OrderHistory> orderHistoryList = findOrderHistoryByPaymentId(paymentId);
+        return makeListOfOrderHistoryResponseDto(orderHistoryList);
+    }
+
+    public List<OrderHistoryResponseDto> getOrderHistoryOrderByLatest() {
+        List<OrderHistory> orderHistoryList = getAllOrderHistoryOrderByCreatedAtDesc();
+        return makeListOfOrderHistoryResponseDto(orderHistoryList);
+    }
+
+    public List<OrderHistoryResponseDto> makeListOfOrderHistoryResponseDto(List<OrderHistory> orderHistoryList) {
         List<OrderHistoryResponseDto> orderHistoryResponseDtoList = new ArrayList<>();
         for (OrderHistory history : orderHistoryList) {
             OrderHistoryResponseDto orderHistoryResponseDto = makeOrderHistoryResponseDto(history);
@@ -64,6 +73,7 @@ public class OrderHistoryService {
         }
         return orderHistoryResponseDtoList;
     }
+
 
     public OrderHistoryResponseDto makeOrderHistoryResponseDto(OrderHistory orderHistory) {
         List<OrderResponseDto> orderResponseDtoList = orderService.toOrderResponseList(orderHistory.getOrderList());
@@ -84,6 +94,10 @@ public class OrderHistoryService {
     public List<OrderHistory> findOrderHistoryByPaymentId(Long paymentId) {
         List<OrderHistory> orderHistoryList = orderHistoryRepository.findAllByPaymentId(paymentId);
         return orderHistoryList;
+    }
+
+    public List<OrderHistory> getAllOrderHistoryOrderByCreatedAtDesc() {
+        return orderHistoryRepository.findAllByOrderByCreatedAtDesc();
     }
 
     public void save(OrderHistory orderHistory) {
