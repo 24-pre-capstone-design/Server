@@ -43,7 +43,14 @@ public enum Status {
 
     // File 오류 응답
     FILE_NOT_FOUND_IN_DB(HttpStatus.NOT_FOUND, "FILE_DB404", "파일정보가 DB에 존재하지 않습니다."),
-    FILE_NOT_FOUND_IN_STORAGE(HttpStatus.NOT_FOUND, "FILE_STORAGE404", "파일이 존재하지 않습니다.")
+    FILE_NOT_FOUND_IN_STORAGE(HttpStatus.NOT_FOUND, "FILE_STORAGE404", "파일이 존재하지 않습니다."),
+
+    // Payment 오류 응답
+    PAYMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "PAYMENT_404", "결제정보가 존재하지 않습니다."),
+
+    // OrderHistory 오류 응답
+    ORDERHISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "ORDERHISTORY404", "주문내역이 존재하지 않습니다."),
+
     ;
 
     private final HttpStatus httpStatus;

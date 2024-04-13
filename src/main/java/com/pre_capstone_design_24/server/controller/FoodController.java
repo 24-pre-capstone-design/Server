@@ -65,7 +65,7 @@ public class FoodController {
     }
 
     @Operation(summary = "카테고리 id별 음식 조회")
-    @GetMapping("/{foodCategoryId}")
+    @GetMapping("/category/{foodCategoryId}")
     public ApiResponse<List<FoodResponseDto>> getFoodsByFoodCategoryId(
             @PathVariable("foodCategoryId")
             @RequestParam(required = false)
