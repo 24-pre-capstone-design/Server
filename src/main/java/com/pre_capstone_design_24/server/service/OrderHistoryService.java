@@ -10,13 +10,16 @@ import com.pre_capstone_design_24.server.requestDto.OrderHistoryRequestDto;
 import com.pre_capstone_design_24.server.requestDto.OrderRequestDto;
 import com.pre_capstone_design_24.server.responseDto.OrderHistoryResponseDto;
 import com.pre_capstone_design_24.server.responseDto.OrderResponseDto;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
 @Service
+@Slf4j
 public class OrderHistoryService {
 
     private final OrderHistoryRepository orderHistoryRepository;
@@ -65,6 +68,14 @@ public class OrderHistoryService {
         return makeListOfOrderHistoryResponseDto(orderHistoryList);
     }
 
+    public List<OrderHistoryResponseDto> getOrderHistoryOrderByDate(LocalDate localDate) {
+        int year = localDate.getYear();
+        int month = localDate.getMonthValue();
+        int day = localDate.getDayOfMonth();
+        List<OrderHistory> orderHistoryList = findByYearMonthDay(year, month, day);
+        return makeListOfOrderHistoryResponseDto(orderHistoryList);
+    }
+
     public long getNumberOfNEWOrderHistory(OrderHistoryStatus status) {
         return getNumberOfOrderHistoryByOrderHistoryStatus(status);
     }
@@ -101,6 +112,10 @@ public class OrderHistoryService {
     public List<OrderHistory> findOrderHistoryByPaymentId(Long paymentId) {
         List<OrderHistory> orderHistoryList = orderHistoryRepository.findAllByPaymentId(paymentId);
         return orderHistoryList;
+    }
+
+    public List<OrderHistory> findByYearMonthDay(int year, int month, int date) {
+        return orderHistoryRepository.findByYearMonthDay(year, month, date);
     }
 
     public List<OrderHistory> getAllOrderHistoryOrderByCreatedAtDesc() {

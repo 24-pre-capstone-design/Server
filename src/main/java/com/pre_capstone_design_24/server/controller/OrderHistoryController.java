@@ -8,6 +8,8 @@ import com.pre_capstone_design_24.server.responseDto.OrderHistoryResponseDto;
 import com.pre_capstone_design_24.server.service.OrderHistoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -63,6 +65,14 @@ public class OrderHistoryController {
     @GetMapping("/latest")
     public ApiResponse<?> getOrderHistoryOrderByLatest() {
         List<OrderHistoryResponseDto> orderHistoryResponseDtoList = orderHistoryService.getOrderHistoryOrderByLatest();
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), orderHistoryResponseDtoList);
+    }
+
+    @Operation(summary = "날짜로 주문내역 조회")
+    @GetMapping("/date")
+    public ApiResponse<?> getOrderHistoryByDate(
+            @RequestParam LocalDate date) {
+        List<OrderHistoryResponseDto> orderHistoryResponseDtoList = orderHistoryService.getOrderHistoryOrderByDate(date);
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), orderHistoryResponseDtoList);
     }
 
