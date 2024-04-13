@@ -65,6 +65,10 @@ public class OrderHistoryService {
         return makeListOfOrderHistoryResponseDto(orderHistoryList);
     }
 
+    public long getNumberOfNEWOrderHistory(OrderHistoryStatus status) {
+        return getNumberOfOrderHistoryByOrderHistoryStatus(status);
+    }
+
     public List<OrderHistoryResponseDto> makeListOfOrderHistoryResponseDto(List<OrderHistory> orderHistoryList) {
         List<OrderHistoryResponseDto> orderHistoryResponseDtoList = new ArrayList<>();
         for (OrderHistory history : orderHistoryList) {
@@ -73,7 +77,6 @@ public class OrderHistoryService {
         }
         return orderHistoryResponseDtoList;
     }
-
 
     public OrderHistoryResponseDto makeOrderHistoryResponseDto(OrderHistory orderHistory) {
         List<OrderResponseDto> orderResponseDtoList = orderService.toOrderResponseList(orderHistory.getOrderList());
@@ -89,6 +92,10 @@ public class OrderHistoryService {
     public OrderHistory getOrderHistoryById(Long id) {
         return orderHistoryRepository.findById(id)
                 .orElseThrow(() -> new GeneralException(Status.ORDERHISTORY_NOT_FOUND));
+    }
+
+    public long getNumberOfOrderHistoryByOrderHistoryStatus(OrderHistoryStatus status) {
+        return orderHistoryRepository.countByOrderHistoryStatus(status);
     }
 
     public List<OrderHistory> findOrderHistoryByPaymentId(Long paymentId) {

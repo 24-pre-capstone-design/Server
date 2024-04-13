@@ -66,6 +66,13 @@ public class OrderHistoryController {
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), orderHistoryResponseDtoList);
     }
 
+    @Operation(summary = "신규 주문내역 개수 조회")
+    @GetMapping("/new")
+    public ApiResponse<?> getNumberOfNEWOrderHistory() {
+        long numberOfNEWOrderHistory = orderHistoryService.getNumberOfNEWOrderHistory(OrderHistoryStatus.NEW);
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), numberOfNEWOrderHistory);
+    }
+
 
 
 }

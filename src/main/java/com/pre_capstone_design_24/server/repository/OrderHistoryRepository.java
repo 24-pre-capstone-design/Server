@@ -1,6 +1,7 @@
 package com.pre_capstone_design_24.server.repository;
 
 import com.pre_capstone_design_24.server.domain.OrderHistory;
+import com.pre_capstone_design_24.server.domain.OrderHistoryStatus;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,5 +13,7 @@ public interface OrderHistoryRepository extends JpaRepository<OrderHistory, Long
     List<OrderHistory> findAllByPaymentId (Long paymentId);
 
     List<OrderHistory> findAllByOrderByCreatedAtDesc();
+
+    long countByOrderHistoryStatus(OrderHistoryStatus orderHistoryStatus);
 
 }
