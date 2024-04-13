@@ -76,6 +76,15 @@ public class OrderHistoryController {
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), orderHistoryResponseDtoList);
     }
 
+    @Operation(summary = "월 매출액 조회")
+    @GetMapping("/month")
+    public ApiResponse<?> getRevenueByMonth(
+            @RequestParam int year,
+            @RequestParam int month) {
+        long revenue = orderHistoryService.getRevenueByYearMonth(year, month);
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), revenue);
+    }
+
     @Operation(summary = "신규 주문내역 개수 조회")
     @GetMapping("/new")
     public ApiResponse<?> getNumberOfNEWOrderHistory() {

@@ -20,4 +20,8 @@ public interface OrderHistoryRepository extends JpaRepository<OrderHistory, Long
     @Query("SELECT orderHistory FROM OrderHistory orderHistory WHERE FUNCTION('YEAR', orderHistory.createdAt) = :year AND FUNCTION('MONTH', orderHistory.createdAt) = :month AND FUNCTION('DAY', orderHistory.createdAt) = :day")
     List<OrderHistory> findByYearMonthDay(int year, int month, int day);
 
+    @Query("SELECT orderHistory FROM OrderHistory orderHistory WHERE FUNCTION('YEAR', orderHistory.createdAt) = :year AND FUNCTION('MONTH', orderHistory.createdAt) = :month")
+
+    List<OrderHistory> findAllByYearMonth(int year, int month);
+
 }

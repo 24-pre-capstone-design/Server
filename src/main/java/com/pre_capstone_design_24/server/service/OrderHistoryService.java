@@ -72,8 +72,18 @@ public class OrderHistoryService {
         int year = localDate.getYear();
         int month = localDate.getMonthValue();
         int day = localDate.getDayOfMonth();
-        List<OrderHistory> orderHistoryList = findByYearMonthDay(year, month, day);
+        List<OrderHistory> orderHistoryList = findOrderHistoryByYearMonthDay(year, month, day);
         return makeListOfOrderHistoryResponseDto(orderHistoryList);
+    }
+
+    public long getRevenueByYearMonth(int year, int month) {
+        long revenue = 0;
+        List<OrderHistory> orderHistoryList = findOrderHistoryByYearMonth(year, month);
+        for(OrderHistory orderHistory : orderHistoryList) {
+            List<Order> orderList = orderService.getOrdersByOrderHistoryId(orderHistory.getId());
+            revenue += orderService.getTotalCostOfOrders(orderList);
+        }
+        return revenue;
     }
 
     public long getNumberOfNEWOrderHistory(OrderHistoryStatus status) {
@@ -110,12 +120,15 @@ public class OrderHistoryService {
     }
 
     public List<OrderHistory> findOrderHistoryByPaymentId(Long paymentId) {
-        List<OrderHistory> orderHistoryList = orderHistoryRepository.findAllByPaymentId(paymentId);
-        return orderHistoryList;
+        return orderHistoryRepository.findAllByPaymentId(paymentId);
     }
 
-    public List<OrderHistory> findByYearMonthDay(int year, int month, int date) {
+    public List<OrderHistory> findOrderHistoryByYearMonthDay(int year, int month, int date) {
         return orderHistoryRepository.findByYearMonthDay(year, month, date);
+    }
+
+    public List<OrderHistory> findOrderHistoryByYearMonth(int year, int month) {
+        return orderHistoryRepository.findAllByYearMonth(year, month);
     }
 
     public List<OrderHistory> getAllOrderHistoryOrderByCreatedAtDesc() {

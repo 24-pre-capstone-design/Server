@@ -36,6 +36,18 @@ public class OrderService {
         return orderResponseDtoList;
     }
 
+    public List<Order> getOrdersByOrderHistoryId(Long orderHistoryId) {
+        return orderRepository.findAllByOrderHistoryId(orderHistoryId);
+    }
+
+    public long getTotalCostOfOrders(List<Order> orderList) {
+        long totalCost = 0;
+        for(Order order : orderList) {
+            totalCost += order.getSumOfCost();
+        }
+        return totalCost;
+    }
+
     public void saveOrders(List<Order> orders){
         for(Order order : orders) {
             save(order);
