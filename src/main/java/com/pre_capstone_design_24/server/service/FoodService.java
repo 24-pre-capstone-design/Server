@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -72,6 +73,24 @@ public class FoodService {
         }
 
         List<Food> foods = foodRepository.findByFoodCategory(foodCategory);
+        return foods.stream()
+                .map(food -> FoodResponseDto.of(food))
+                .toList();
+    }
+
+    public List<FoodResponseDto> getFoodsByFKeyword(String keyword) {
+        List<Food> foods;
+        if (keyword == null) {
+            foods = foodRepository.findAll();
+        } else {
+            foods = new ArrayList<>();
+            for (Food food : foodRepository.findAll()) {
+                if (food.getName().contains(keyword)) {
+                    foods.add(food);
+                }
+            }
+        }
+
         return foods.stream()
                 .map(food -> FoodResponseDto.of(food))
                 .toList();
