@@ -75,4 +75,14 @@ public class FoodController {
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), foodResponseDtos);
     }
 
+    @Operation(summary = "음식 키워드 검색")
+    @GetMapping("/search/{keyword}")
+    public ApiResponse<List<FoodResponseDto>> getFoodsByKeyword(
+            @PathVariable("keyword")
+            @RequestParam(required = false)
+            String keyword
+    ) {
+        List<FoodResponseDto> foodResponseDtos = foodService.getFoodsByFKeyword(keyword);
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), foodResponseDtos);
+    }
 }
