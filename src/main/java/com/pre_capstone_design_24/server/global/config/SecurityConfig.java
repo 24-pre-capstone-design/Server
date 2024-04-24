@@ -40,6 +40,7 @@ public class SecurityConfig {
         "/auth/login",
         "/resources/files/**",
         "/auth/id-duplicate-check",
+        "/auth/random-password",
         "/payment/**",
     };
 

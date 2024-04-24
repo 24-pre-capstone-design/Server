@@ -35,6 +35,8 @@ public class Owner implements UserDetails {
 
     private String name;
 
+    private String birthDate;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -52,6 +54,7 @@ public class Owner implements UserDetails {
                 .id(ownerRequestDto.getId())
                 .password(passwordEncoder.encode(ownerRequestDto.getPassword()))
                 .name(ownerRequestDto.getName())
+                .birthDate(ownerRequestDto.getBirthDate())
                 .role(Role.USER)
                 .build();
     }
@@ -87,11 +90,13 @@ public class Owner implements UserDetails {
     }
 
     public void update(OwnerRequestDto ownerRequestDto, PasswordEncoder passwordEncoder) {
-            if (ownerRequestDto.getName() != null) {
-                this.name = ownerRequestDto.getName();
-            }
-            if (ownerRequestDto.getPassword() != null && !ownerRequestDto.getPassword().isEmpty()) {
-                this.password = passwordEncoder.encode(ownerRequestDto.getPassword());
-            }
-        }
+        this.name = ownerRequestDto.getName();
+        this.password = passwordEncoder.encode(ownerRequestDto.getPassword());
+        this.birthDate = ownerRequestDto.getBirthDate();
+    }
+
+    public void updatePassword(String encodedNewPassword) {
+        this.password = encodedNewPassword;
+    }
+
 }
