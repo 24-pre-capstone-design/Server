@@ -7,6 +7,7 @@ import com.pre_capstone_design_24.server.requestDto.PasswordCheckRequestDto;
 import com.pre_capstone_design_24.server.responseDto.IdDuplicateCheckResponseDto;
 import com.pre_capstone_design_24.server.responseDto.JwtResponseDto;
 import com.pre_capstone_design_24.server.responseDto.PasswordCheckResponseDto;
+import com.pre_capstone_design_24.server.responseDto.PasswordRandomSetResponseDto;
 import com.pre_capstone_design_24.server.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -52,6 +53,17 @@ public class AuthController {
         PasswordCheckResponseDto passwordCheckResponseDto = authService.passwordCheck(passwordCheckRequestDto);
         return ApiResponse.onSuccess(Status.OK.getCode(),
                 Status.OK.getMessage(), passwordCheckResponseDto);
+    }
+
+    @GetMapping("/random-password")
+    @Operation(summary = "비밀번호 재설정")
+    public ApiResponse<?> setRandomPassword (
+            @RequestParam String id,
+            @RequestParam String birthDate
+    ) {
+        PasswordRandomSetResponseDto passwordRandomSetResponseDto = authService.setRandomPassword(id, birthDate);
+        return ApiResponse.onSuccess(Status.OK.getCode(),
+                Status.OK.getMessage(), passwordRandomSetResponseDto);
     }
 
 }

@@ -70,5 +70,10 @@ public class OwnerService {
         ownerRepository.delete(owner);
     }
 
+    public Owner getOwnerByIdAndBirthDate(String id, String birthDate) {
+        return ownerRepository.findByIdAndBirthDate(id, birthDate)
+                .orElseThrow(() -> new GeneralException(Status.OWNER_NOT_FOUND));
+    }
+
 }
 

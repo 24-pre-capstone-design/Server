@@ -18,10 +18,13 @@ public class OwnerResponseDto {
 
     String name;
 
+    String birthDate;
+
     public static OwnerResponseDto of(Owner owner) {
         return OwnerResponseDto.builder()
                 .id(owner.getId())
                 .name(owner.getName())
+                .birthDate(owner.getBirthDate())
                 .build();
     }
 
