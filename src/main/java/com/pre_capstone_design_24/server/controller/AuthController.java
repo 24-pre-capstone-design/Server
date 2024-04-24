@@ -56,7 +56,7 @@ public class AuthController {
     }
 
     @GetMapping("/random-password")
-    @Operation(summary = "비밀번호 재설정")
+    @Operation(summary = "랜덤 비밀번호 발급 받기")
     public ApiResponse<?> setRandomPassword (
             @RequestParam String id,
             @RequestParam String birthDate
