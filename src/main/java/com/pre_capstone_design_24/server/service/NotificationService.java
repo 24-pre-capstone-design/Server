@@ -3,6 +3,8 @@ package com.pre_capstone_design_24.server.service;
 import com.pre_capstone_design_24.server.domain.Notification;
 import com.pre_capstone_design_24.server.domain.Order;
 import com.pre_capstone_design_24.server.domain.OrderHistory;
+import com.pre_capstone_design_24.server.global.response.GeneralException;
+import com.pre_capstone_design_24.server.global.response.Status;
 import com.pre_capstone_design_24.server.repository.NotificationRepository;
 import com.pre_capstone_design_24.server.repository.OrderHistoryRepository;
 import com.pre_capstone_design_24.server.requestDto.NotificationRequestDto;
@@ -23,7 +25,7 @@ public class NotificationService {
 
     public void sendUnreadOrderNotification(Long orderHistoryId) {
         OrderHistory orderHistory = orderHistoryRepository.findById(orderHistoryId)
-            .orElseThrow(() -> new RuntimeException("OrderHistory not found for id: " + orderHistoryId));
+            .orElseThrow(() -> new GeneralException(Status.ORDERHISTORY_NOT_FOUND));
 
         List<Order> orders = orderHistory.getOrderList();
         StringBuilder contentBuilder = new StringBuilder("주문 ID: ");

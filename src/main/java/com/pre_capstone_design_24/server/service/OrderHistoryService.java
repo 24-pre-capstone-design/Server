@@ -28,6 +28,8 @@ public class OrderHistoryService {
 
     private final PaymentService paymentService;
 
+    private final NotificationService notificationService;
+
     public void createOrderHistory(OrderHistoryRequestDto orderHistoryRequestDto) {
         Long paymentId = orderHistoryRequestDto.getPaymentId();
         List<OrderRequestDto> orderRequestDtoList = orderHistoryRequestDto.getOrderRequestDtoList();
@@ -43,6 +45,8 @@ public class OrderHistoryService {
         orderService.setOrderHistoryId(orders, orderHistory);
 
         save(orderHistory);
+
+        notificationService.sendUnreadOrderNotification(orderHistory.getId());
     }
 
     public OrderHistoryResponseDto getOrderHistory(Long orderHistoryId) {
