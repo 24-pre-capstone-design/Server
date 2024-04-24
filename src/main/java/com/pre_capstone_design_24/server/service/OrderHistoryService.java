@@ -10,11 +10,14 @@ import com.pre_capstone_design_24.server.requestDto.OrderHistoryRequestDto;
 import com.pre_capstone_design_24.server.requestDto.OrderRequestDto;
 import com.pre_capstone_design_24.server.responseDto.OrderHistoryResponseDto;
 import com.pre_capstone_design_24.server.responseDto.OrderResponseDto;
+import com.pre_capstone_design_24.server.responseDto.PagedResponseDto;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
@@ -63,17 +66,19 @@ public class OrderHistoryService {
         return makeListOfOrderHistoryResponseDto(orderHistoryList);
     }
 
-    public List<OrderHistoryResponseDto> getOrderHistoryOrderByLatest() {
-        List<OrderHistory> orderHistoryList = getAllOrderHistoryOrderByCreatedAtDesc();
-        return makeListOfOrderHistoryResponseDto(orderHistoryList);
+    public PagedResponseDto<OrderHistoryResponseDto> getOrderHistoryOrderByLatest(Pageable pageable) {
+        Page<OrderHistory> pagedOrderHistory = getAllOrderHistoryOrderByCreatedAtDesc(pageable);
+        return new PagedResponseDto<>(pagedOrderHistory.
+                map(orderHistory -> makeOrderHistoryResponseDto(orderHistory)));
     }
 
-    public List<OrderHistoryResponseDto> getOrderHistoryOrderByDate(LocalDate localDate) {
+    public PagedResponseDto<OrderHistoryResponseDto> getOrderHistoryOrderByDate(LocalDate localDate, Pageable pageable) {
         int year = localDate.getYear();
         int month = localDate.getMonthValue();
         int day = localDate.getDayOfMonth();
-        List<OrderHistory> orderHistoryList = findOrderHistoryByYearMonthDay(year, month, day);
-        return makeListOfOrderHistoryResponseDto(orderHistoryList);
+        Page<OrderHistory> pagedOrderHistory = findOrderHistoryByYearMonthDay(year, month, day, pageable);
+        return new PagedResponseDto<>(pagedOrderHistory.
+                map(orderHistory -> makeOrderHistoryResponseDto(orderHistory)));
     }
 
     public long getRevenueByYearMonth(int year, int month) {
@@ -123,16 +128,16 @@ public class OrderHistoryService {
         return orderHistoryRepository.findAllByPaymentId(paymentId);
     }
 
-    public List<OrderHistory> findOrderHistoryByYearMonthDay(int year, int month, int date) {
-        return orderHistoryRepository.findByYearMonthDay(year, month, date);
+    public Page<OrderHistory> findOrderHistoryByYearMonthDay(int year, int month, int date, Pageable pageable) {
+        return orderHistoryRepository.findByYearMonthDay(year, month, date, pageable);
     }
 
     public List<OrderHistory> findOrderHistoryByYearMonth(int year, int month) {
         return orderHistoryRepository.findAllByYearMonth(year, month);
     }
 
-    public List<OrderHistory> getAllOrderHistoryOrderByCreatedAtDesc() {
-        return orderHistoryRepository.findAllByOrderByCreatedAtDesc();
+    public Page<OrderHistory> getAllOrderHistoryOrderByCreatedAtDesc(Pageable pageable) {
+        return orderHistoryRepository.findAllByOrderByCreatedAtDesc(pageable);
     }
 
     public void save(OrderHistory orderHistory) {

@@ -5,6 +5,7 @@ import com.pre_capstone_design_24.server.global.response.ApiResponse;
 import com.pre_capstone_design_24.server.global.response.Status;
 import com.pre_capstone_design_24.server.requestDto.OrderHistoryRequestDto;
 import com.pre_capstone_design_24.server.responseDto.OrderHistoryResponseDto;
+import com.pre_capstone_design_24.server.responseDto.PagedResponseDto;
 import com.pre_capstone_design_24.server.service.OrderHistoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,6 +13,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -63,16 +66,23 @@ public class OrderHistoryController {
 
     @Operation(summary = "최신순으로 주문내역 전체 조회")
     @GetMapping("/latest")
-    public ApiResponse<?> getOrderHistoryOrderByLatest() {
-        List<OrderHistoryResponseDto> orderHistoryResponseDtoList = orderHistoryService.getOrderHistoryOrderByLatest();
+    public ApiResponse<?> getOrderHistoryOrderByLatest(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        PagedResponseDto<OrderHistoryResponseDto> orderHistoryResponseDtoList = orderHistoryService.getOrderHistoryOrderByLatest(pageable);
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), orderHistoryResponseDtoList);
     }
 
     @Operation(summary = "날짜로 주문내역 조회")
     @GetMapping("/date")
     public ApiResponse<?> getOrderHistoryByDate(
-            @RequestParam LocalDate date) {
-        List<OrderHistoryResponseDto> orderHistoryResponseDtoList = orderHistoryService.getOrderHistoryOrderByDate(date);
+            @RequestParam LocalDate date,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        PagedResponseDto<OrderHistoryResponseDto> orderHistoryResponseDtoList = orderHistoryService.getOrderHistoryOrderByDate(date, pageable);
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), orderHistoryResponseDtoList);
     }
 

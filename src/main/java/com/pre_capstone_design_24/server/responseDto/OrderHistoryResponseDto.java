@@ -1,6 +1,7 @@
 package com.pre_capstone_design_24.server.responseDto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.pre_capstone_design_24.server.domain.OrderHistory;
 import com.pre_capstone_design_24.server.domain.OrderHistoryStatus;
 import java.time.LocalDateTime;
 import java.util.List;
