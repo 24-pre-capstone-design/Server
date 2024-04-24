@@ -50,6 +50,10 @@ public class OwnerService {
     }
 
     public void UpdateOwner(String id, OwnerRequestDto ownerRequestDto) {
+        Owner currentOwner = getCurrentOwner();
+        if (!currentOwner.getId().equals(id)){
+            throw new GeneralException(Status.UNAUTHORIZED);
+        }
         Owner owner = ownerRepository.findById(id)
             .orElseThrow(() -> new GeneralException(Status.OWNER_NOT_FOUND));
         owner.update(ownerRequestDto, passwordEncoder);
