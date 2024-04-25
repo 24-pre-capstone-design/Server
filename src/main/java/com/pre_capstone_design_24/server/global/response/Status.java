@@ -51,6 +51,9 @@ public enum Status {
     // OrderHistory 오류 응답
     ORDERHISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "ORDERHISTORY404", "주문내역이 존재하지 않습니다."),
 
+    // Notification 오류 응답
+    NOTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "NOTIFICATION404", "알림번호가 존재하지 않습니다."),
+
     ;
 
     private final HttpStatus httpStatus;
