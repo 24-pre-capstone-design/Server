@@ -64,6 +64,13 @@ public class NotificationService {
     }
 
     public List<Notification> getAllNotifications() {
+        List<Notification> unreadNotifications = notificationRepository.findByReadFalseOrderByCreatedAtDesc();
+
+        for (Notification notification : unreadNotifications) {
+            notification.setRead(true);
+            save(notification);
+        }
+
         return notificationRepository.findAllByOrderByCreatedAtDesc();
     }
 
