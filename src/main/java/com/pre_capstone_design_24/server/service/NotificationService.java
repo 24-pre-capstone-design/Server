@@ -1,8 +1,10 @@
 package com.pre_capstone_design_24.server.service;
 
+import com.pre_capstone_design_24.server.domain.Employee;
 import com.pre_capstone_design_24.server.domain.Notification;
 import com.pre_capstone_design_24.server.domain.Order;
 import com.pre_capstone_design_24.server.domain.OrderHistory;
+import com.pre_capstone_design_24.server.domain.Owner;
 import com.pre_capstone_design_24.server.global.response.GeneralException;
 import com.pre_capstone_design_24.server.global.response.Status;
 import com.pre_capstone_design_24.server.repository.NotificationRepository;
@@ -68,5 +70,23 @@ public class NotificationService {
     public void save(Notification notification) {
         notificationRepository.save(notification);
     }
-}
 
+    public void deleteNotification(Long notificationId) {
+        Notification notification = notificationRepository.findById(notificationId)
+            .orElseThrow(() -> new GeneralException(Status.NOTIFICATION_NOT_FOUND));
+
+        delete(notification);
+    }
+
+    public void deleteAllNotifications() {
+        deleteAll();
+    }
+
+    public void delete(Notification notificationId) {
+        notificationRepository.delete(notificationId);
+    }
+
+    public void deleteAll() {
+        notificationRepository.deleteAll();
+    }
+}

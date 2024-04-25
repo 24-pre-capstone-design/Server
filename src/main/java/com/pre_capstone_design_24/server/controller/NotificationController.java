@@ -40,4 +40,18 @@ public class NotificationController {
         List<Notification> allNotifications = notificationService.getAllNotifications();
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), allNotifications);
     }
+
+    @Operation(summary = "모든 알림 삭제")
+    @DeleteMapping("/deleteAll")
+    public ApiResponse<?> deleteAllNotifications() {
+        notificationService.deleteAllNotifications();
+        return ApiResponse.onSuccess(Status.OK.getCode(), "모든 알림이 삭제되었습니다.", null);
+    }
+
+    @Operation(summary = "알림 삭제")
+    @DeleteMapping("/{id}")
+    public ApiResponse<?> deleteNotification(@PathVariable Long id) {
+        notificationService.deleteNotification(id);
+        return ApiResponse.onSuccess(Status.OK.getCode(), "알림이 삭제되었습니다.", null);
+    }
 }
