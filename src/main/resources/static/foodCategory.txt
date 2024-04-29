@@ -1,0 +1,5 @@
+foodCategoryName
+밥
+찌개
+국/탕
+구이

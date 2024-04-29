@@ -32,6 +32,12 @@ public class FoodCategory {
                 .build();
     }
 
+    public static FoodCategory of(String name) {
+        return FoodCategory.builder()
+                .name(name)
+                .build();
+    }
+
     public void updateName(String name) {
         this.name = name;
     }
