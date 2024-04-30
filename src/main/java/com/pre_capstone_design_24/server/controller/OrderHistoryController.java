@@ -6,6 +6,7 @@ import com.pre_capstone_design_24.server.global.response.Status;
 import com.pre_capstone_design_24.server.requestDto.OrderHistoryRequestDto;
 import com.pre_capstone_design_24.server.responseDto.OrderHistoryResponseDto;
 import com.pre_capstone_design_24.server.responseDto.PagedResponseDto;
+import com.pre_capstone_design_24.server.responseDto.PaymentResponseDto;
 import com.pre_capstone_design_24.server.service.OrderHistoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -60,8 +61,8 @@ public class OrderHistoryController {
     @GetMapping("/payment/{paymentId}")
     public ApiResponse<?> getOrderHistoryByPaymentId(
             @PathVariable Long paymentId) {
-        List<OrderHistoryResponseDto> orderHistoryResponseDtoList = orderHistoryService.getOrderHistoryByPaymentId(paymentId);
-        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), orderHistoryResponseDtoList);
+        PaymentResponseDto paymentResponseDto = orderHistoryService.getOrderHistoryByPaymentId(paymentId);
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), paymentResponseDto);
     }
 
     @Operation(summary = "최신순으로 주문내역 전체 조회")
