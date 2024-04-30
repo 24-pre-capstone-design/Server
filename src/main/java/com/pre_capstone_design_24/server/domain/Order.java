@@ -39,6 +39,8 @@ public class Order {
     @NotNull
     private Integer quantity;
 
+    private Long sumOfCost;
+
     public void setOrderHistory(OrderHistory orderHistory) {
         this.orderHistory = orderHistory;
     }

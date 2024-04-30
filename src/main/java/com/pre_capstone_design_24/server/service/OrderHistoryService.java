@@ -11,6 +11,7 @@ import com.pre_capstone_design_24.server.requestDto.OrderRequestDto;
 import com.pre_capstone_design_24.server.responseDto.OrderHistoryResponseDto;
 import com.pre_capstone_design_24.server.responseDto.OrderResponseDto;
 import com.pre_capstone_design_24.server.responseDto.PagedResponseDto;
+import com.pre_capstone_design_24.server.responseDto.PaymentResponseDto;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,7 @@ public class OrderHistoryService {
                 .payment(paymentService.findPaymentById(paymentId))
                 .orderList(orders)
                 .orderHistoryStatus(OrderHistoryStatus.NEW)
+                .sumOfCost(orderService.getTotalCostOfOrders(orders))
                 .build();
 
         orderService.setOrderHistoryId(orders, orderHistory);
@@ -63,11 +65,21 @@ public class OrderHistoryService {
         save(orderHistory);
     }
 
-    public List<OrderHistoryResponseDto> getOrderHistoryByPaymentId(Long paymentId) {
+    public PaymentResponseDto getOrderHistoryByPaymentId(Long paymentId) {
         if (!paymentService.isPaymentExist(paymentId))
             throw new GeneralException(Status.PAYMENT_NOT_FOUND);
+
         List<OrderHistory> orderHistoryList = findOrderHistoryByPaymentId(paymentId);
-        return makeListOfOrderHistoryResponseDto(orderHistoryList);
+        List<OrderHistoryResponseDto> orderHistoryResponseDtoList = makeListOfOrderHistoryResponseDto(orderHistoryList);
+        Long sumOfCost = orderHistoryResponseDtoList.stream()
+                .mapToLong(OrderHistoryResponseDto::getSumOfOrderHistoryCost)
+                .sum();
+
+        return PaymentResponseDto.builder()
+                .paymentId(paymentId)
+                .orderHistoryResponseDtoList(orderHistoryResponseDtoList)
+                .sumOfPaymentCost(sumOfCost)
+                .build();
     }
 
     public PagedResponseDto<OrderHistoryResponseDto> getOrderHistoryOrderByLatest(Pageable pageable) {
@@ -115,6 +127,7 @@ public class OrderHistoryService {
                 .orderResponseDtoList(orderResponseDtoList)
                 .orderHistoryStatus(orderHistory.getOrderHistoryStatus())
                 .orderedAt(orderHistory.getCreatedAt())
+                .sumOfOrderHistoryCost(orderHistory.getSumOfCost())
                 .build();
         return orderHistoryResponseDto;
     }
