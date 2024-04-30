@@ -84,7 +84,6 @@ public class Food {
         updatePrice(foodRequestDto.getPrice());
         updatePictureURL(foodRequestDto.getPictureURL());
         updateStatus(foodRequestDto.getStatus());
-        updateCreatedAt(foodRequestDto.getCreatedAt());
     }
 
 }

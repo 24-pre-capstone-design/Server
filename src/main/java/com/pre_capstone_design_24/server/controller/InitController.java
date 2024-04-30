@@ -21,26 +21,27 @@ public class InitController {
 
     @GetMapping("/foodCategories")
     @Operation(summary = "DB에 food category 적재")
-    public ApiResponse<?> addMovies() throws IOException {
+    public ApiResponse<?> addCategories() throws IOException {
         initService.addCategories();
         return ApiResponse.onSuccess(Status.OK.getCode(),
                 Status.CREATED.getMessage(), null);
     }
 
-/*    @GetMapping("/images")
-    @Operation(summary = "DB에 food image 적재")
-    public ApiResponse<?> addTags() throws IOException {
-        initService.addImages();
-        return ApiResponse.onSuccess(Status.OK.getCode(),
-                Status.CREATED.getMessage(), null);
-    }*/
-
     @GetMapping("/foods")
     @Operation(summary = "DB에 food 적재")
-    public ApiResponse<?> addRatings() throws IOException {
+    public ApiResponse<?> addFoods() throws IOException {
         initService.addFoods();
         return ApiResponse.onSuccess(Status.OK.getCode(),
                 Status.CREATED.getMessage(), null);
     }
+
+    @GetMapping("/orderHistories")
+    @Operation(summary = "DB에 orderHistory 적재")
+    public ApiResponse<?> addOrderHistories() throws IOException {
+        initService.addOrderHistories();
+        return ApiResponse.onSuccess(Status.OK.getCode(),
+                Status.CREATED.getMessage(), null);
+    }
+
 
 }
