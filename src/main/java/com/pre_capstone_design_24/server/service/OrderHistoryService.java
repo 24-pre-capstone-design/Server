@@ -43,6 +43,7 @@ public class OrderHistoryService {
                 .payment(paymentService.findPaymentById(paymentId))
                 .orderList(orders)
                 .orderHistoryStatus(OrderHistoryStatus.NEW)
+                .sumOfCost(orderService.getTotalCostOfOrders(orders))
                 .build();
 
         orderService.setOrderHistoryId(orders, orderHistory);
@@ -115,6 +116,7 @@ public class OrderHistoryService {
                 .orderResponseDtoList(orderResponseDtoList)
                 .orderHistoryStatus(orderHistory.getOrderHistoryStatus())
                 .orderedAt(orderHistory.getCreatedAt())
+                .sumOfCost(orderHistory.getSumOfCost())
                 .build();
         return orderHistoryResponseDto;
     }

@@ -50,6 +50,8 @@ public class OrderHistory {
     @CreatedDate
     private LocalDateTime createdAt;
 
+    private Long sumOfCost;
+
     public void updateOrderHistoryStatus(OrderHistoryStatus orderHistoryStatus) {
         this.orderHistoryStatus = orderHistoryStatus;
     }
