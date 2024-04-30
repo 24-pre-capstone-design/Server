@@ -42,6 +42,7 @@ public class SecurityConfig {
         "/auth/id-duplicate-check",
         "/auth/random-password",
         "/payment/**",
+        "/init/**"
     };
 
     @Bean

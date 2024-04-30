@@ -11,12 +11,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Food {
 
     @Id
@@ -40,17 +43,15 @@ public class Food {
     @Enumerated(value = EnumType.STRING)
     private FoodStatus status;
 
-    @NotNull
+    @CreatedDate
     private LocalDateTime createdAt;
 
     public static Food of(FoodRequestDto foodRequestDto) {
-
         return Food.builder()
                 .name(foodRequestDto.getName())
                 .price(foodRequestDto.getPrice())
                 .pictureURL(foodRequestDto.getPictureURL())
                 .status(foodRequestDto.getStatus())
-                .createdAt(foodRequestDto.getCreatedAt())
                 .build();
     }
 
@@ -83,7 +84,6 @@ public class Food {
         updatePrice(foodRequestDto.getPrice());
         updatePictureURL(foodRequestDto.getPictureURL());
         updateStatus(foodRequestDto.getStatus());
-        updateCreatedAt(foodRequestDto.getCreatedAt());
     }
 
 }

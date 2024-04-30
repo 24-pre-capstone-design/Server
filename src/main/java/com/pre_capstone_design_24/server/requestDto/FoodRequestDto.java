@@ -37,9 +37,4 @@ public class FoodRequestDto {
     @Schema(description = "음식 상태", example = "SALE")
     private FoodStatus status;
 
-    @NotNull
-    @Schema(description = "등록 시기", example = "2024-04-06 00:43:07")
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime createdAt;
-
 }
