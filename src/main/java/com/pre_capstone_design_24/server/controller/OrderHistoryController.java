@@ -76,6 +76,18 @@ public class OrderHistoryController {
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), orderHistoryResponseDtoList);
     }
 
+    @Operation(summary = "주문상태별로 주문내역 조회")
+    @GetMapping("/{orderHistoryStatus}")
+    public ApiResponse<?> getOrderHistoryOrderByStatus(
+            @PathVariable("orderHistoryStatus") OrderHistoryStatus orderHistoryStatus,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        PagedResponseDto<OrderHistoryResponseDto> orderHistoryResponseDtoList = orderHistoryService.getOrderHistoryOrderByStatus(orderHistoryStatus,pageable);
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), orderHistoryResponseDtoList);
+    }
+
     @Operation(summary = "날짜로 주문내역 조회")
     @GetMapping("/date")
     public ApiResponse<?> getOrderHistoryByDate(

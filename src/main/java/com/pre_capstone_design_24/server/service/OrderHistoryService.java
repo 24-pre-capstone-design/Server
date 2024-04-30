@@ -88,6 +88,12 @@ public class OrderHistoryService {
                 map(orderHistory -> makeOrderHistoryResponseDto(orderHistory)));
     }
 
+    public PagedResponseDto<OrderHistoryResponseDto> getOrderHistoryOrderByStatus(OrderHistoryStatus orderHistoryStatus, Pageable pageable) {
+        Page<OrderHistory> pagedOrderHistory = orderHistoryRepository.findAllByOrderHistoryStatus(orderHistoryStatus, pageable);
+        return new PagedResponseDto<>(pagedOrderHistory
+                .map(orderHistory -> makeOrderHistoryResponseDto(orderHistory)));
+    }
+
     public PagedResponseDto<OrderHistoryResponseDto> getOrderHistoryOrderByDate(LocalDate localDate, Pageable pageable) {
         int year = localDate.getYear();
         int month = localDate.getMonthValue();

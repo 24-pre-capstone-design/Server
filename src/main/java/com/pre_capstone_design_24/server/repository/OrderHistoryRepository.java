@@ -26,4 +26,6 @@ public interface OrderHistoryRepository extends JpaRepository<OrderHistory, Long
 
     List<OrderHistory> findAllByYearMonth(int year, int month);
 
+    Page<OrderHistory> findAllByOrderHistoryStatus(OrderHistoryStatus orderHistoryStatus, Pageable pageable);
+
 }
