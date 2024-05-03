@@ -26,3 +26,6 @@ foodCategoryId foodName foodPrice foodStatus
 1 영양솥밥 12000 SALE
 5 잡채 13000 SALE
 5 전복버터구이 21000 SALE
+2 꽁치김치찌개 12000 SALE
+2 동태찌개 12000 SALE
+2 돼지고기김치찌개 12000 SALE
