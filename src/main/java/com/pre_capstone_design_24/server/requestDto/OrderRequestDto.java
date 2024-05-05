@@ -1,5 +1,6 @@
 package com.pre_capstone_design_24.server.requestDto;
 
+import com.pre_capstone_design_24.server.domain.Food;
 import com.pre_capstone_design_24.server.domain.Order;
 import com.pre_capstone_design_24.server.service.FoodService;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,9 +25,12 @@ public class OrderRequestDto {
     private Integer quantity;
 
     public static Order of(OrderRequestDto orderRequestDto, FoodService foodService) {
+        Food food = foodService.getFoodById(orderRequestDto.getFoodId());
+        int quantity = orderRequestDto.getQuantity();
         return Order.builder()
-                .food(foodService.getFoodById(orderRequestDto.getFoodId()))
-                .quantity(orderRequestDto.getQuantity())
+                .food(food)
+                .quantity(quantity)
+                .sumOfCost((long) (food.getPrice() * quantity))
                 .build();
     }
 

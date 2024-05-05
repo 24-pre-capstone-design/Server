@@ -6,12 +6,14 @@ import com.pre_capstone_design_24.server.domain.Token;
 import com.pre_capstone_design_24.server.global.auth.JwtProvider;
 import com.pre_capstone_design_24.server.global.response.GeneralException;
 import com.pre_capstone_design_24.server.global.response.Status;
+import com.pre_capstone_design_24.server.global.util.RandomPasswordGenerator;
 import com.pre_capstone_design_24.server.repository.OwnerRepository;
 import com.pre_capstone_design_24.server.requestDto.LoginRequestDto;
 import com.pre_capstone_design_24.server.requestDto.PasswordCheckRequestDto;
 import com.pre_capstone_design_24.server.responseDto.IdDuplicateCheckResponseDto;
 import com.pre_capstone_design_24.server.responseDto.JwtResponseDto;
 import com.pre_capstone_design_24.server.responseDto.PasswordCheckResponseDto;
+import com.pre_capstone_design_24.server.responseDto.PasswordRandomSetResponseDto;
 import java.security.AuthProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -58,6 +60,17 @@ public class AuthService {
         boolean isPasswordCorrect = passwordEncoder.matches(currentPassword, owner.getPassword());
         return PasswordCheckResponseDto.builder()
                 .isPasswordCorrect(isPasswordCorrect)
+                .build();
+    }
+
+    public PasswordRandomSetResponseDto setRandomPassword(String id, String birthDate) {
+        Owner owner = ownerService.getOwnerByIdAndBirthDate(id, birthDate);
+        String randomPassword = RandomPasswordGenerator.generatePassword(9);
+        owner.updatePassword(passwordEncoder.encode(randomPassword));
+        ownerService.save(owner);
+
+        return PasswordRandomSetResponseDto.builder()
+                .newPassword(randomPassword)
                 .build();
     }
 

@@ -10,11 +10,15 @@ import com.pre_capstone_design_24.server.requestDto.OrderHistoryRequestDto;
 import com.pre_capstone_design_24.server.requestDto.OrderRequestDto;
 import com.pre_capstone_design_24.server.responseDto.OrderHistoryResponseDto;
 import com.pre_capstone_design_24.server.responseDto.OrderResponseDto;
+import com.pre_capstone_design_24.server.responseDto.PagedResponseDto;
+import com.pre_capstone_design_24.server.responseDto.PaymentResponseDto;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
@@ -40,6 +44,7 @@ public class OrderHistoryService {
                 .payment(paymentService.findPaymentById(paymentId))
                 .orderList(orders)
                 .orderHistoryStatus(OrderHistoryStatus.NEW)
+                .sumOfCost(orderService.getTotalCostOfOrders(orders))
                 .build();
 
         orderService.setOrderHistoryId(orders, orderHistory);
@@ -60,24 +65,42 @@ public class OrderHistoryService {
         save(orderHistory);
     }
 
-    public List<OrderHistoryResponseDto> getOrderHistoryByPaymentId(Long paymentId) {
+    public PaymentResponseDto getOrderHistoryByPaymentId(Long paymentId) {
         if (!paymentService.isPaymentExist(paymentId))
             throw new GeneralException(Status.PAYMENT_NOT_FOUND);
+
         List<OrderHistory> orderHistoryList = findOrderHistoryByPaymentId(paymentId);
-        return makeListOfOrderHistoryResponseDto(orderHistoryList);
+        List<OrderHistoryResponseDto> orderHistoryResponseDtoList = makeListOfOrderHistoryResponseDto(orderHistoryList);
+        Long sumOfCost = orderHistoryResponseDtoList.stream()
+                .mapToLong(OrderHistoryResponseDto::getSumOfOrderHistoryCost)
+                .sum();
+
+        return PaymentResponseDto.builder()
+                .paymentId(paymentId)
+                .orderHistoryResponseDtoList(orderHistoryResponseDtoList)
+                .sumOfPaymentCost(sumOfCost)
+                .build();
     }
 
-    public List<OrderHistoryResponseDto> getOrderHistoryOrderByLatest() {
-        List<OrderHistory> orderHistoryList = getAllOrderHistoryOrderByCreatedAtDesc();
-        return makeListOfOrderHistoryResponseDto(orderHistoryList);
+    public PagedResponseDto<OrderHistoryResponseDto> getOrderHistoryOrderByLatest(Pageable pageable) {
+        Page<OrderHistory> pagedOrderHistory = getAllOrderHistoryOrderByCreatedAtDesc(pageable);
+        return new PagedResponseDto<>(pagedOrderHistory.
+                map(orderHistory -> makeOrderHistoryResponseDto(orderHistory)));
     }
 
-    public List<OrderHistoryResponseDto> getOrderHistoryOrderByDate(LocalDate localDate) {
+    public PagedResponseDto<OrderHistoryResponseDto> getOrderHistoryOrderByStatus(OrderHistoryStatus orderHistoryStatus, Pageable pageable) {
+        Page<OrderHistory> pagedOrderHistory = orderHistoryRepository.findAllByOrderHistoryStatus(orderHistoryStatus, pageable);
+        return new PagedResponseDto<>(pagedOrderHistory
+                .map(orderHistory -> makeOrderHistoryResponseDto(orderHistory)));
+    }
+
+    public PagedResponseDto<OrderHistoryResponseDto> getOrderHistoryOrderByDate(LocalDate localDate, Pageable pageable) {
         int year = localDate.getYear();
         int month = localDate.getMonthValue();
         int day = localDate.getDayOfMonth();
-        List<OrderHistory> orderHistoryList = findOrderHistoryByYearMonthDay(year, month, day);
-        return makeListOfOrderHistoryResponseDto(orderHistoryList);
+        Page<OrderHistory> pagedOrderHistory = findOrderHistoryByYearMonthDay(year, month, day, pageable);
+        return new PagedResponseDto<>(pagedOrderHistory.
+                map(orderHistory -> makeOrderHistoryResponseDto(orderHistory)));
     }
 
     public long getRevenueByYearMonth(int year, int month) {
@@ -110,6 +133,7 @@ public class OrderHistoryService {
                 .orderResponseDtoList(orderResponseDtoList)
                 .orderHistoryStatus(orderHistory.getOrderHistoryStatus())
                 .orderedAt(orderHistory.getCreatedAt())
+                .sumOfOrderHistoryCost(orderHistory.getSumOfCost())
                 .build();
         return orderHistoryResponseDto;
     }
@@ -127,16 +151,16 @@ public class OrderHistoryService {
         return orderHistoryRepository.findAllByPaymentId(paymentId);
     }
 
-    public List<OrderHistory> findOrderHistoryByYearMonthDay(int year, int month, int date) {
-        return orderHistoryRepository.findByYearMonthDay(year, month, date);
+    public Page<OrderHistory> findOrderHistoryByYearMonthDay(int year, int month, int date, Pageable pageable) {
+        return orderHistoryRepository.findByYearMonthDay(year, month, date, pageable);
     }
 
     public List<OrderHistory> findOrderHistoryByYearMonth(int year, int month) {
         return orderHistoryRepository.findAllByYearMonth(year, month);
     }
 
-    public List<OrderHistory> getAllOrderHistoryOrderByCreatedAtDesc() {
-        return orderHistoryRepository.findAllByOrderByCreatedAtDesc();
+    public Page<OrderHistory> getAllOrderHistoryOrderByCreatedAtDesc(Pageable pageable) {
+        return orderHistoryRepository.findAllByOrderByCreatedAtDesc(pageable);
     }
 
     public void save(OrderHistory orderHistory) {

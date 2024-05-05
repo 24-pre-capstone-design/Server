@@ -21,4 +21,6 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    Long sumOfCost;
+
 }

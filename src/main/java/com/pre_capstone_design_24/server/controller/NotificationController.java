@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.catalina.User;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -32,6 +33,7 @@ public class NotificationController {
     }
 
     @Operation(summary = "읽지 않은 알림 조회")
+    @Secured({"ROLE_USER"})
     @GetMapping("/unread")
     public ApiResponse<?> getUnreadNotifications() {
         List<Notification> unreadNotifications = notificationService.getUnreadNotifications();
@@ -39,6 +41,7 @@ public class NotificationController {
     }
 
     @Operation(summary = "전체 알림 조회")
+    @Secured({"ROLE_USER"})
     @GetMapping("/all")
     public ApiResponse<?> getAllNotifications() {
         List<Notification> allNotifications = notificationService.getAllNotifications();
@@ -46,6 +49,7 @@ public class NotificationController {
     }
 
     @Operation(summary = "모든 알림 삭제")
+    @Secured({"ROLE_USER"})
     @DeleteMapping("/deleteAll")
     public ApiResponse<?> deleteAllNotifications() {
         notificationService.deleteAllNotifications();
@@ -53,6 +57,7 @@ public class NotificationController {
     }
 
     @Operation(summary = "알림 삭제")
+    @Secured({"ROLE_USER"})
     @DeleteMapping("/{id}")
     public ApiResponse<?> deleteNotification(@PathVariable Long id) {
         notificationService.deleteNotification(id);

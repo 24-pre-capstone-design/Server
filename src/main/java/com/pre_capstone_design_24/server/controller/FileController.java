@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,7 @@ public class FileController {
     private final FileService fileService;
 
     @Operation(summary = "파일 업로드")
+    @Secured({"ROLE_USER"})
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ApiResponse<?> uploadFile(
             @RequestParam(name = "multipartFile") MultipartFile multipartFile
@@ -34,6 +36,7 @@ public class FileController {
     }
 
     @Operation(summary = "파일 삭제")
+    @Secured({"ROLE_USER"})
     @DeleteMapping(value = "")
     public ApiResponse<?> deleteFile(
             @RequestParam(name = "fileUrl") String fileUrl

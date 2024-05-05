@@ -27,6 +27,11 @@ public class FoodCategoryService {
         save(newFoodCategory);
     }
 
+    public void createFoodCategory(String foodCategoryName) {
+        FoodCategory newFoodCategory = FoodCategory.of(foodCategoryName);
+        save(newFoodCategory);
+    }
+
     public FoodCategoryResponseDto getFoodCategory(Long id) {
         FoodCategory foodCategory = getFoodCategoryById(id);
         return FoodCategoryResponseDto.of(foodCategory);

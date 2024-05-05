@@ -1,6 +1,7 @@
 package com.pre_capstone_design_24.server.responseDto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.pre_capstone_design_24.server.domain.OrderHistory;
 import com.pre_capstone_design_24.server.domain.OrderHistoryStatus;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,6 +21,8 @@ public class OrderHistoryResponseDto {
     private List<OrderResponseDto> orderResponseDtoList;
 
     private OrderHistoryStatus orderHistoryStatus;
+
+    private Long sumOfOrderHistoryCost;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime orderedAt;

@@ -17,14 +17,14 @@ public class OrderResponseDto {
 
     private Integer quantity;
 
-    private Integer sumOfCost;
+    private Integer sumOfOrderCost;
 
     public static OrderResponseDto toResponseDto(Order order) {
         return OrderResponseDto.builder()
                 .orderHistoryId(order.getOrderHistory().getId())
                 .foodName(order.getFood().getName())
                 .quantity(order.getQuantity())
-                .sumOfCost(order.getSumOfCost())
+                .sumOfOrderCost(order.getSumOfCost())
                 .build();
     }
 
