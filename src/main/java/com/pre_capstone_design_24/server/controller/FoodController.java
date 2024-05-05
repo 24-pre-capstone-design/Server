@@ -8,6 +8,7 @@ import com.pre_capstone_design_24.server.service.FoodService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class FoodController {
     private final FoodService foodService;
 
     @Operation(summary = "음식 생성")
+    @Secured({"ROLE_USER"})
     @PostMapping("")
     public ApiResponse<?> createFood(
             @RequestBody FoodRequestDto foodRequestDto
@@ -39,6 +41,7 @@ public class FoodController {
     }
 
     @Operation(summary = "음식 수정")
+    @Secured({"ROLE_USER"})
     @PatchMapping("/{foodId}")
     public ApiResponse<?> updateFood(
             @PathVariable("foodId") Long foodId,
@@ -49,6 +52,7 @@ public class FoodController {
     }
 
     @Operation(summary = "음식 삭제")
+    @Secured({"ROLE_USER"})
     @DeleteMapping("/{foodId}")
     public ApiResponse<?> deleteFood(
             @PathVariable("foodId") Long foodId

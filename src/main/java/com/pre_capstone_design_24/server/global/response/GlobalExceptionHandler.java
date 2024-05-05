@@ -1,8 +1,7 @@
 package com.pre_capstone_design_24.server.global.response;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
+import org.springframework.security.access.AccessDeniedException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -27,6 +26,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             Exception unexpectedException,
             WebRequest webRequest
     ) {
+        log.error(unexpectedException.getClass().toGenericString());
         log.error("예상치 못한 오류 발생: {}", unexpectedException.getMessage());
         log.error("발생 지점: {}", unexpectedException.getStackTrace()[0]);
         Body body = Status.INTERNAL_SERVER_ERROR.getBody();
@@ -87,5 +87,23 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 request
         );
     }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Object> exception(
+            AccessDeniedException exception,
+            HttpServletRequest request
+    ) {
+        Body body = Status.UNAUTHORIZED.getBody();
+        ApiResponse<Object> response = ApiResponse.onFailure(body.getCode(), body.getMessage(), null);
+        WebRequest webRequest = new ServletWebRequest(request);
+        return super.handleExceptionInternal(
+                exception,
+                response,
+                HttpHeaders.EMPTY,
+                body.getHttpStatus(),
+                webRequest
+        );
+    }
+
 
 }

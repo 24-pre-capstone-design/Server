@@ -8,6 +8,8 @@ import com.pre_capstone_design_24.server.service.FoodCategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +23,7 @@ public class FoodCategoryController {
     private final FoodCategoryService foodCategoryService;
 
     @Operation(summary = "음식 카테고리 생성")
+    @Secured({"ROLE_USER"})
     @PostMapping("")
     public ApiResponse<?> createFoodCategory(
             @RequestBody FoodCategoryRequestDto foodCategoryRequestDto
@@ -39,6 +42,7 @@ public class FoodCategoryController {
     }
 
     @Operation(summary = "음식 카테고리 수정")
+    @Secured({"ROLE_USER"})
     @PatchMapping("/{foodCategoryId}")
     public ApiResponse<?> updateFoodCategory(
             @PathVariable("foodCategoryId") Long foodCategoryId,
@@ -49,6 +53,7 @@ public class FoodCategoryController {
     }
 
     @Operation(summary = "음식 카테고리 삭제")
+    @Secured({"ROLE_USER"})
     @DeleteMapping("/{foodCategoryId}")
     public ApiResponse<?> deleteFoodCategory(
             @PathVariable("foodCategoryId") Long foodCategoryId

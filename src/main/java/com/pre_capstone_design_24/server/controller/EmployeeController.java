@@ -7,6 +7,7 @@ import com.pre_capstone_design_24.server.service.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -25,6 +26,7 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @Operation(summary = "직원 생성")
+    @Secured({"ROLE_USER"})
     @PostMapping("")
     public ApiResponse<?> createEmployee(@RequestBody EmployeeRequestDto requestDto) {
         employeeService.createEmployee(requestDto);
@@ -32,6 +34,7 @@ public class EmployeeController {
     }
 
     @Operation(summary = "모든 직원 조회")
+    @Secured({"ROLE_USER"})
     @GetMapping("/all")
     public ApiResponse<?> getAllEmployees() {
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), employeeService.getAllEmployees());
@@ -39,6 +42,7 @@ public class EmployeeController {
 
 
     @Operation(summary = "직원 수정")
+    @Secured({"ROLE_USER"})
     @PatchMapping("/{employeeId}")
     public ApiResponse<?> updateEmployee(@PathVariable Long employeeId, @RequestBody EmployeeRequestDto requestDto) {
         employeeService.updateEmployee(employeeId, requestDto);
@@ -46,6 +50,7 @@ public class EmployeeController {
     }
 
     @Operation(summary = "직원 삭제")
+    @Secured({"ROLE_USER"})
     @DeleteMapping("/{employeeId}")
     public ApiResponse<?> deleteEmployee(@PathVariable Long employeeId) {
         employeeService.deleteEmployee(employeeId);

@@ -16,6 +16,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,6 +50,7 @@ public class OrderHistoryController {
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), orderHistoryResponseDto);    }
 
     @Operation(summary = "주문내역 상태 수정")
+    @Secured({"ROLE_USER"})
     @PatchMapping("/{orderHistoryId}")
     public ApiResponse<?> updateOrderHistoryStatus(
             @PathVariable Long orderHistoryId,
@@ -66,6 +68,7 @@ public class OrderHistoryController {
     }
 
     @Operation(summary = "최신순으로 주문내역 전체 조회")
+    @Secured({"ROLE_USER"})
     @GetMapping("/latest")
     public ApiResponse<?> getOrderHistoryOrderByLatest(
             @RequestParam(name = "page", defaultValue = "0") int page,
@@ -77,6 +80,7 @@ public class OrderHistoryController {
     }
 
     @Operation(summary = "주문상태별로 주문내역 조회")
+    @Secured({"ROLE_USER"})
     @GetMapping("/{orderHistoryStatus}")
     public ApiResponse<?> getOrderHistoryOrderByStatus(
             @PathVariable("orderHistoryStatus") OrderHistoryStatus orderHistoryStatus,
@@ -89,6 +93,7 @@ public class OrderHistoryController {
     }
 
     @Operation(summary = "날짜로 주문내역 조회")
+    @Secured({"ROLE_USER"})
     @GetMapping("/date")
     public ApiResponse<?> getOrderHistoryByDate(
             @RequestParam LocalDate date,
@@ -100,6 +105,7 @@ public class OrderHistoryController {
     }
 
     @Operation(summary = "월 매출액 조회")
+    @Secured({"ROLE_USER"})
     @GetMapping("/month")
     public ApiResponse<?> getRevenueByMonth(
             @RequestParam int year,
@@ -109,6 +115,7 @@ public class OrderHistoryController {
     }
 
     @Operation(summary = "신규 주문내역 개수 조회")
+    @Secured({"ROLE_USER"})
     @GetMapping("/new")
     public ApiResponse<?> getNumberOfNEWOrderHistory() {
         long numberOfNEWOrderHistory = orderHistoryService.getNumberOfNEWOrderHistory(OrderHistoryStatus.NEW);
