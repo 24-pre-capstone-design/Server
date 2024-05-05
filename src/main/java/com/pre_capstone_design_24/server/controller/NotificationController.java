@@ -8,7 +8,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
+import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
 @RequestMapping("/notifications")
@@ -22,9 +26,9 @@ public class NotificationController {
     @PostMapping("/newOrder")
     public ApiResponse<?> createNewOrderNotification(
         @RequestParam Long orderHistoryId)
-        {
-            notificationService.sendUnreadOrderNotification(orderHistoryId);
-            return ApiResponse.onSuccess(Status.CREATED.getCode(), Status.CREATED.getMessage(), null);
+    {
+        notificationService.sendUnreadOrderNotification(orderHistoryId);
+        return ApiResponse.onSuccess(Status.CREATED.getCode(), Status.CREATED.getMessage(), null);
     }
 
     @Operation(summary = "읽지 않은 알림 조회")
@@ -53,5 +57,12 @@ public class NotificationController {
     public ApiResponse<?> deleteNotification(@PathVariable Long id) {
         notificationService.deleteNotification(id);
         return ApiResponse.onSuccess(Status.OK.getCode(), "알림이 삭제되었습니다.", null);
+    }
+
+    @Operation(summary = "sse세션연결")
+    @GetMapping(value = "/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter subscribe(@AuthenticationPrincipal User principal,
+        @RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "") String lastEventId) {
+        return notificationService.subscribe(principal.getUsername(), lastEventId);
     }
 }
