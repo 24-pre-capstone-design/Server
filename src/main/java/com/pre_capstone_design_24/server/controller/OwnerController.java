@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import com.pre_capstone_design_24.server.global.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -48,6 +49,7 @@ public class OwnerController {
 
     @Operation(summary = "사장님 정보 수정")
     @PatchMapping("/{ownerId}")
+    @Secured({"ROLE_USER"})
     public ApiResponse<?> updateOwner(
         @RequestBody OwnerRequestDto ownerRequestDto,
         @PathVariable("ownerId") String ownerId
@@ -57,6 +59,7 @@ public class OwnerController {
     }
 
     @Operation(summary = "사장님 탈퇴")
+    @Secured({"ROLE_USER"})
     @DeleteMapping("/{ownerId}")
     public ApiResponse<?> deleteOwner (
         @PathVariable("ownerId") String ownerId
