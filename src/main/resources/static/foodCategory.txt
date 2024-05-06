@@ -1,0 +1,8 @@
+foodCategoryName
+식사
+찌개
+국/탕
+구이
+요리
+곁들임
+음료
