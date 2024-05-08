@@ -27,6 +27,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import org.apache.commons.io.FileUtils;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -82,8 +83,12 @@ public class InitService {
                 String foodName = token[1];
                 int foodPrice = Integer.parseInt(token[2]);
                 FoodStatus foodStatus = FoodStatus.valueOf(token[3]);
-                ClassPathResource imageResource = new ClassPathResource("static/" + foodName + ".jpeg");
-                File imageFile = imageResource.getFile();
+
+                Resource imageResource = new ClassPathResource("static/" + foodName + ".jpeg");
+                InputStream imageInputStream = imageResource.getInputStream();
+
+                File imageFile = File.createTempFile(foodName + "--", ".jpeg");
+                FileUtils.copyInputStreamToFile(imageInputStream, imageFile);
 
                 String url = addImages(imageFile);
 
