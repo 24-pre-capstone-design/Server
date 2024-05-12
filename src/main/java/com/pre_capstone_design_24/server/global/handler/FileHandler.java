@@ -33,6 +33,7 @@ public class FileHandler {
         File file = new File(savePath);
         ensureParentDirectoryExists(file);
         multipartFile.transferTo(file);
+        setFilePermissions(file, savePath);
         return savePath;
     }
 
@@ -50,5 +51,18 @@ public class FileHandler {
             file.getParentFile().mkdirs();
         }
     }
-
+    private void setFilePermissions(File file, String savePath) throws IOException {
+        try {
+            String os = System.getProperty("os.name").toLowerCase();
+            if (os.contains("win")) {
+                file.setReadable(true);
+                file.setWritable(false);
+                file.setExecutable(false);
+            } else {
+                Runtime.getRuntime().exec("chmod 400 " + savePath);
+            }
+        } catch (IOException e) {
+            throw new IOException(e);
+        }
+    }
 }
