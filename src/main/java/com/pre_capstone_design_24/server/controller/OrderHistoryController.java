@@ -43,7 +43,7 @@ public class OrderHistoryController {
     }
 
     @Operation(summary = "주문내역 조회")
-    @PostMapping("/{orderHistoryId}")
+    @GetMapping("/get/{orderHistoryId}")
     public ApiResponse<?> getOrderHistory(
             @PathVariable Long orderHistoryId) {
         OrderHistoryResponseDto orderHistoryResponseDto = orderHistoryService.getOrderHistory(orderHistoryId);
