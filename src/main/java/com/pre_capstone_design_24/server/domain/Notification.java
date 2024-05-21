@@ -34,4 +34,15 @@ public class Notification {
     @Column(name = "`read`", nullable = false)
     private boolean read = false;
 
+    @Builder
+    public Notification(String title, String content, LocalDateTime createdAt) {
+        this.title = title;
+        this.content = content;
+        this.createdAt = createdAt;
+        this.read = false;
+    }
+
+    public void markAsRead() {
+        this.read = true;
+    }
 }
