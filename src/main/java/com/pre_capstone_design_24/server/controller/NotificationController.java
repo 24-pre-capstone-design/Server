@@ -3,12 +3,17 @@ package com.pre_capstone_design_24.server.controller;
 import com.pre_capstone_design_24.server.domain.Notification;
 import com.pre_capstone_design_24.server.global.response.ApiResponse;
 import com.pre_capstone_design_24.server.global.response.Status;
+import com.pre_capstone_design_24.server.responseDto.NotificationResponseDto;
+import com.pre_capstone_design_24.server.responseDto.OrderHistoryResponseDto;
+import com.pre_capstone_design_24.server.responseDto.PagedResponseDto;
 import com.pre_capstone_design_24.server.service.NotificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.User;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.access.annotation.Secured;
@@ -34,18 +39,26 @@ public class NotificationController {
 
     @Operation(summary = "읽지 않은 알림 조회")
     @Secured({"ROLE_USER"})
-    @GetMapping("/unread")
-    public ApiResponse<?> getUnreadNotifications() {
-        List<Notification> unreadNotifications = notificationService.getUnreadNotifications();
-        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), unreadNotifications);
+    @GetMapping("/unreadPaged")
+    public ApiResponse<?> getUnreadNotifications(
+        @RequestParam(name = "page", defaultValue = "0") int page,
+        @RequestParam(name = "size", defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        PagedResponseDto<NotificationResponseDto> notificationResponseDtoList = notificationService.getNotificationsByUnread(pageable);
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), notificationResponseDtoList);
     }
 
     @Operation(summary = "전체 알림 조회")
     @Secured({"ROLE_USER"})
     @GetMapping("/all")
-    public ApiResponse<?> getAllNotifications() {
-        List<Notification> allNotifications = notificationService.getAllNotifications();
-        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), allNotifications);
+    public ApiResponse<?> getAllNotifications(
+        @RequestParam(name = "page", defaultValue = "0") int page,
+        @RequestParam(name = "size", defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        PagedResponseDto<NotificationResponseDto> notificationResponseDtoList = notificationService.getAllNotifications(pageable);
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), notificationResponseDtoList);
     }
 
     @Operation(summary = "모든 알림 삭제")

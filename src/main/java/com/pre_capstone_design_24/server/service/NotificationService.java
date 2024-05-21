@@ -9,12 +9,15 @@ import com.pre_capstone_design_24.server.repository.EmitterRepository;
 import com.pre_capstone_design_24.server.repository.NotificationRepository;
 import com.pre_capstone_design_24.server.repository.OrderHistoryRepository;
 import com.pre_capstone_design_24.server.responseDto.NotificationResponseDto;
+import com.pre_capstone_design_24.server.responseDto.PagedResponseDto;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -93,7 +96,6 @@ public class NotificationService {
         }
     }
 
-
     private void resendLostData(String lastEventId, String userEmail, SseEmitter emitter) {
         Map<String, Object> eventCaches = emitterRepository.findAllEventCacheStartWithByMemberId(userEmail);
         eventCaches.entrySet().stream()
@@ -104,11 +106,6 @@ public class NotificationService {
     private void saveEventCache(String key, Notification notification) {
         emitterRepository.saveEventCache(key, notification);
     }
-
-    private Map<String, SseEmitter> findAllEmitterStartWithByMemberId(String memberId) {
-        return emitterRepository.findAllEmitterStartWithByMemberId(memberId);
-    }
-
 
     public List<Notification> getUnreadNotifications() {
         List<Notification> unreadNotifications = notificationRepository.findByReadFalseOrderByCreatedAtDesc();
@@ -121,38 +118,37 @@ public class NotificationService {
         return unreadNotifications;
     }
 
-    public List<Notification> getAllNotifications() {
-        List<Notification> unreadNotifications = notificationRepository.findByReadFalseOrderByCreatedAtDesc();
+    public PagedResponseDto<NotificationResponseDto> getNotificationsByUnread(Pageable pageable) {
+        Page<Notification> pagedNotification = notificationRepository.findByReadFalseOrderByCreatedAtDesc(pageable);
 
-        for (Notification notification : unreadNotifications) {
+        for (Notification notification : pagedNotification) {
             notification.setRead(true);
             save(notification);
         }
 
-        return notificationRepository.findAllByOrderByCreatedAtDesc();
+        return new PagedResponseDto<>(pagedNotification.map(this::makeNotificationResponseDto));
+    }
+
+    public PagedResponseDto<NotificationResponseDto> getAllNotifications(Pageable pageable) {
+        Page<Notification> pagedNotification = notificationRepository.findAllByOrderByCreatedAtDesc(pageable);
+        return new PagedResponseDto<>(pagedNotification.map(this::makeNotificationResponseDto));
+    }
+
+    public NotificationResponseDto makeNotificationResponseDto(Notification notification) {
+        return NotificationResponseDto.createResponse(notification);
     }
 
     public Notification save(Notification notification) {
-        notificationRepository.save(notification);
-        return notification;
+        return notificationRepository.save(notification);
     }
 
     public void deleteNotification(Long notificationId) {
         Notification notification = notificationRepository.findById(notificationId)
             .orElseThrow(() -> new GeneralException(Status.NOTIFICATION_NOT_FOUND));
-
-        delete(notification);
+        notificationRepository.delete(notification);
     }
 
     public void deleteAllNotifications() {
-        deleteAll();
-    }
-
-    public void delete(Notification notificationId) {
-        notificationRepository.delete(notificationId);
-    }
-
-    public void deleteAll() {
         notificationRepository.deleteAll();
     }
 }

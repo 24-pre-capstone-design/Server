@@ -33,6 +33,7 @@ public class NotificationResponseDto {
             .title(notification.getTitle())
             .content(notification.getContent())
             .createdAt(LocalDateTime.parse(notification.getCreatedAt().toString()))
+            .read(notification.isRead())
             .build();
     }
 }
