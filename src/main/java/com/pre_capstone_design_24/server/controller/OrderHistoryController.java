@@ -42,6 +42,18 @@ public class OrderHistoryController {
         return ApiResponse.onSuccess(Status.CREATED.getCode(), Status.CREATED.getMessage(), null);
     }
 
+    @Operation(summary = "키워드로 주문내역 검색하기")
+    @Secured({"ROLE_USER"})
+    @GetMapping("/search")
+    public ApiResponse<?> searchOrderHistory(
+            @RequestParam(name = "keyword") String keyword,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        PagedResponseDto<OrderHistoryResponseDto> orderHistoryResponseDtoList = orderHistoryService.searchOrderHistory(pageable, keyword);
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), orderHistoryResponseDtoList);
+    }
+
     @Operation(summary = "주문내역 조회")
     @GetMapping("/get/{orderHistoryId}")
     public ApiResponse<?> getOrderHistory(

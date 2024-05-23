@@ -1,6 +1,7 @@
 package com.pre_capstone_design_24.server.service;
 
 import com.pre_capstone_design_24.server.domain.Employee;
+import com.pre_capstone_design_24.server.domain.EmployeeStatus;
 import com.pre_capstone_design_24.server.domain.Owner;
 import com.pre_capstone_design_24.server.global.auth.JwtProvider;
 import com.pre_capstone_design_24.server.global.response.GeneralException;
@@ -9,6 +10,7 @@ import com.pre_capstone_design_24.server.repository.EmployeeRepository;
 import com.pre_capstone_design_24.server.repository.OwnerRepository;
 import com.pre_capstone_design_24.server.requestDto.EmployeeRequestDto;
 import com.pre_capstone_design_24.server.responseDto.EmployeeResponseDto;
+import com.pre_capstone_design_24.server.responseDto.OwnerResponseDto;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
@@ -68,4 +70,48 @@ public class EmployeeService {
         employeeRepository.delete(employee);
     }
 
+    public EmployeeResponseDto getEmployeeById(Long employeeId) {
+        Owner currentOwner = ownerService.getCurrentOwner();
+        Employee employee = employeeRepository.findById(employeeId)
+            .orElseThrow(() -> new GeneralException(Status.EMPLOYEE_NOT_FOUND));
+
+        if (!employee.getOwner().equals(currentOwner)) {
+            throw new GeneralException(Status.UNAUTHORIZED);
+        }
+
+        return EmployeeResponseDto.of(employee);
+    }
+
+    public EmployeeResponseDto getEmployeeByName(String employeeName) {
+        Owner currentOwner = ownerService.getCurrentOwner();
+        Employee employee = employeeRepository.findByNameAndOwner(employeeName, currentOwner)
+            .orElseThrow(() -> new GeneralException(Status.EMPLOYEE_NOT_FOUND));
+        return EmployeeResponseDto.of(employee);
+    }
+
+    public List<EmployeeResponseDto> getEmployeesByWorkDate(String workDate) {
+        Owner currentOwner = ownerService.getCurrentOwner();
+        List<Employee> employees = employeeRepository.findAllByWorkDateAndOwner(workDate, currentOwner);
+
+        if (employees.isEmpty()) {
+            throw new GeneralException(Status.EMPLOYEE_NOT_FOUND);
+        }
+
+        return employees.stream()
+            .map(EmployeeResponseDto::of)
+            .collect(Collectors.toList());
+    }
+
+    public List<EmployeeResponseDto> getEmployeesByStatus(EmployeeStatus status) {
+        Owner currentOwner = ownerService.getCurrentOwner();
+        List<Employee> employees = employeeRepository.findAllByStatusAndOwner(status, currentOwner);
+
+        if (employees.isEmpty()) {
+            throw new GeneralException(Status.EMPLOYEE_NOT_FOUND);
+        }
+
+        return employees.stream()
+            .map(EmployeeResponseDto::of)
+            .collect(Collectors.toList());
+    }
 }
