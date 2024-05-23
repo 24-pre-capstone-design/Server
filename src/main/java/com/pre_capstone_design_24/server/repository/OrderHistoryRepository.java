@@ -28,4 +28,7 @@ public interface OrderHistoryRepository extends JpaRepository<OrderHistory, Long
 
     Page<OrderHistory> findAllByOrderHistoryStatus(OrderHistoryStatus orderHistoryStatus, Pageable pageable);
 
+    @Query("SELECT oh FROM OrderHistory oh JOIN oh.orderList o WHERE o.food.name LIKE %:keyword%")
+    Page<OrderHistory> searchOrderHistoryByKeyword(Pageable pageable, String keyword);
+
 }

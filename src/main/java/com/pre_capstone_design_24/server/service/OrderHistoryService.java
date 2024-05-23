@@ -54,6 +54,12 @@ public class OrderHistoryService {
         notificationService.sendUnreadOrderNotification(orderHistory.getId());
     }
 
+    public PagedResponseDto<OrderHistoryResponseDto> searchOrderHistory(Pageable pageable, String keyword) {
+        Page<OrderHistory> pagedOrderHistory = searchOrderHistoryByKeyword(pageable, keyword);
+        return new PagedResponseDto<>(pagedOrderHistory.
+                map(orderHistory -> makeOrderHistoryResponseDto(orderHistory)));
+    }
+
     public OrderHistoryResponseDto getOrderHistory(Long orderHistoryId) {
         OrderHistory orderHistory = getOrderHistoryById(orderHistoryId);
         return makeOrderHistoryResponseDto(orderHistory);
@@ -149,6 +155,10 @@ public class OrderHistoryService {
 
     public List<OrderHistory> findOrderHistoryByPaymentId(Long paymentId) {
         return orderHistoryRepository.findAllByPaymentId(paymentId);
+    }
+
+    public Page<OrderHistory> searchOrderHistoryByKeyword(Pageable pageable, String keyword) {
+        return orderHistoryRepository.searchOrderHistoryByKeyword(pageable, keyword);
     }
 
     public Page<OrderHistory> findOrderHistoryByYearMonthDay(int year, int month, int date, Pageable pageable) {
