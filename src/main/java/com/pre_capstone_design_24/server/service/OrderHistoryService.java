@@ -13,6 +13,7 @@ import com.pre_capstone_design_24.server.responseDto.OrderResponseDto;
 import com.pre_capstone_design_24.server.responseDto.PagedResponseDto;
 import com.pre_capstone_design_24.server.responseDto.PaymentResponseDto;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -144,6 +145,16 @@ public class OrderHistoryService {
         return orderHistoryResponseDto;
     }
 
+    public long getRevenueByLastNDays(int lastNDays) {
+        long revenue = 0;
+        List<OrderHistory> orderHistoryList = findRecentOrderHistories(lastNDays);
+        for(OrderHistory orderHistory : orderHistoryList) {
+            List<Order> orderList = orderService.getOrdersByOrderHistoryId(orderHistory.getId());
+            revenue += orderService.getTotalCostOfOrders(orderList);
+        }
+        return revenue;
+    }
+
     public OrderHistory getOrderHistoryById(Long id) {
         return orderHistoryRepository.findById(id)
                 .orElseThrow(() -> new GeneralException(Status.ORDERHISTORY_NOT_FOUND));
@@ -167,6 +178,12 @@ public class OrderHistoryService {
 
     public List<OrderHistory> findOrderHistoryByYearMonth(int year, int month) {
         return orderHistoryRepository.findAllByYearMonth(year, month);
+    }
+
+    public List<OrderHistory> findRecentOrderHistories(int days) {
+        LocalDate startDate = LocalDate.now().minusDays(days);
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        return orderHistoryRepository.findOrderHistoriesFromDateTime(startDateTime);
     }
 
     public Page<OrderHistory> getAllOrderHistoryOrderByCreatedAtDesc(Pageable pageable) {

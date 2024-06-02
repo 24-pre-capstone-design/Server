@@ -134,6 +134,16 @@ public class OrderHistoryController {
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), numberOfNEWOrderHistory);
     }
 
+    @Operation(summary = "최근 N일 매출액 조회")
+    @Secured({"ROLE_USER"})
+    @GetMapping("/lastNDays")
+    public ApiResponse<?> getRevenueByLastNDays(
+            @RequestParam int lastNDays
+    ) {
+        long revenue = orderHistoryService.getRevenueByLastNDays(lastNDays);
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), revenue);
+    }
+
 
 
 }
