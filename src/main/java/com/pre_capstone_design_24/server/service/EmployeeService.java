@@ -11,9 +11,12 @@ import com.pre_capstone_design_24.server.repository.OwnerRepository;
 import com.pre_capstone_design_24.server.requestDto.EmployeeRequestDto;
 import com.pre_capstone_design_24.server.responseDto.EmployeeResponseDto;
 import com.pre_capstone_design_24.server.responseDto.OwnerResponseDto;
+import com.pre_capstone_design_24.server.responseDto.PagedResponseDto;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
@@ -30,12 +33,10 @@ public class EmployeeService {
         save(newEmployee);
     }
 
-    public List<EmployeeResponseDto> getAllEmployees() {
+    public PagedResponseDto<EmployeeResponseDto> getAllEmployees(Pageable pageable) {
         Owner currentOwner = ownerService.getCurrentOwner();
-        List<Employee> employees = employeeRepository.findAllByOwner(currentOwner);
-        return employees.stream()
-            .map(EmployeeResponseDto::of)
-            .collect(Collectors.toList());
+        Page<Employee> employees = employeeRepository.findAllByOwner(currentOwner, pageable);
+        return new PagedResponseDto<>(employees.map(this::makeEmployeeResponseDto));
     }
 
     public void updateEmployee(Long employeeId, EmployeeRequestDto employeeRequestDto) {
@@ -119,5 +120,9 @@ public class EmployeeService {
         return employees.stream()
             .map(EmployeeResponseDto::of)
             .collect(Collectors.toList());
+    }
+
+    public EmployeeResponseDto makeEmployeeResponseDto(Employee employee) {
+        return EmployeeResponseDto.of(employee);
     }
 }

@@ -182,6 +182,14 @@ public class OrderHistoryService {
         return revenue;
     }
 
+    public long getNumberOfOrderHistoryByDate(LocalDate date) {
+        return findNumberOfOrderHistoryByCreatedAt(date);
+    }
+
+    public long findNumberOfOrderHistoryByCreatedAt(LocalDate date) {
+        return orderHistoryRepository.countByCreatedAt(date);
+    }
+
     public OrderHistory getOrderHistoryById(Long id) {
         return orderHistoryRepository.findById(id)
                 .orElseThrow(() -> new GeneralException(Status.ORDERHISTORY_NOT_FOUND));

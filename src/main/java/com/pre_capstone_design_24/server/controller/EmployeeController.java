@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -75,8 +77,12 @@ public class EmployeeController {
     @Operation(summary = "모든 직원 조회")
     @Secured({"ROLE_USER"})
     @GetMapping("/all")
-    public ApiResponse<?> getAllEmployees() {
-        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), employeeService.getAllEmployees());
+    public ApiResponse<?> getAllEmployees(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), employeeService.getAllEmployees(pageable));
     }
 
     @Operation(summary = "직원 수정")
