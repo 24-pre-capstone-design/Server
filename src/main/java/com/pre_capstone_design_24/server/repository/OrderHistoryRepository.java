@@ -32,6 +32,17 @@ public interface OrderHistoryRepository extends JpaRepository<OrderHistory, Long
     @Query("SELECT oh FROM OrderHistory oh WHERE oh.createdAt >= :startDateTime")
     List<OrderHistory> findOrderHistoriesFromDateTime(@Param("startDateTime") LocalDateTime startDateTime);
 
+    @Query("SELECT oh FROM OrderHistory oh WHERE oh.createdAt BETWEEN :startDateTime AND :endDateTime")
+    Page<OrderHistory> findByPeriod(
+            @Param("startDateTime") LocalDateTime startDateTime,
+            @Param("endDateTime") LocalDateTime endDateTime,
+            Pageable pageable);
+
+    @Query("SELECT oh FROM OrderHistory oh WHERE oh.createdAt BETWEEN :startDateTime AND :endDateTime")
+    List<OrderHistory> findOrderHistoriesBetweenDates(
+            @Param("startDateTime") LocalDateTime startDateTime,
+            @Param("endDateTime") LocalDateTime endDateTime);
+
     Page<OrderHistory> findAllByOrderHistoryStatus(OrderHistoryStatus orderHistoryStatus, Pageable pageable);
 
     @Query("SELECT oh FROM OrderHistory oh JOIN oh.orderList o WHERE o.food.name LIKE %:keyword%")

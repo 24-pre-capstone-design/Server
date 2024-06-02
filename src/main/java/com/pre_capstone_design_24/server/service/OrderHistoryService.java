@@ -20,6 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
@@ -110,6 +111,12 @@ public class OrderHistoryService {
                 map(orderHistory -> makeOrderHistoryResponseDto(orderHistory)));
     }
 
+    public PagedResponseDto<OrderHistoryResponseDto> getOrderHistoryByPeriod(LocalDate startDate, LocalDate endDate, Pageable pageable) {
+        Page<OrderHistory> pagedOrderHistory = findOrderHistoriesBetweenDates(startDate, endDate, pageable);
+        return new PagedResponseDto<>(pagedOrderHistory.
+                map(orderHistory -> makeOrderHistoryResponseDto(orderHistory)));
+    }
+
     public long getRevenueByYearMonth(int year, int month) {
         long revenue = 0;
         List<OrderHistory> orderHistoryList = findOrderHistoryByYearMonth(year, month);
@@ -155,6 +162,16 @@ public class OrderHistoryService {
         return revenue;
     }
 
+    public long getRevenueByPeriod(LocalDate startDate, LocalDate endDate) {
+        long revenue = 0;
+        List<OrderHistory> orderHistoryList = findOrderHistoriesBetweenDates(startDate, endDate);
+        for(OrderHistory orderHistory : orderHistoryList) {
+            List<Order> orderList = orderService.getOrdersByOrderHistoryId(orderHistory.getId());
+            revenue += orderService.getTotalCostOfOrders(orderList);
+        }
+        return revenue;
+    }
+
     public OrderHistory getOrderHistoryById(Long id) {
         return orderHistoryRepository.findById(id)
                 .orElseThrow(() -> new GeneralException(Status.ORDERHISTORY_NOT_FOUND));
@@ -176,6 +193,12 @@ public class OrderHistoryService {
         return orderHistoryRepository.findByYearMonthDay(year, month, date, pageable);
     }
 
+    public Page<OrderHistory> findOrderHistoriesBetweenDates(LocalDate startDate, LocalDate endDate, Pageable pageable) {
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDateTime endDateTime = endDate.atTime(23, 59, 59);
+        return orderHistoryRepository.findByPeriod(startDateTime, endDateTime, pageable);
+    }
+
     public List<OrderHistory> findOrderHistoryByYearMonth(int year, int month) {
         return orderHistoryRepository.findAllByYearMonth(year, month);
     }
@@ -184,6 +207,12 @@ public class OrderHistoryService {
         LocalDate startDate = LocalDate.now().minusDays(days);
         LocalDateTime startDateTime = startDate.atStartOfDay();
         return orderHistoryRepository.findOrderHistoriesFromDateTime(startDateTime);
+    }
+
+    List<OrderHistory> findOrderHistoriesBetweenDates(LocalDate startDate, LocalDate endDate) {
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDateTime endDateTime = endDate.atTime(23, 59, 59);
+        return orderHistoryRepository.findOrderHistoriesBetweenDates(startDateTime, endDateTime);
     }
 
     public Page<OrderHistory> getAllOrderHistoryOrderByCreatedAtDesc(Pageable pageable) {
