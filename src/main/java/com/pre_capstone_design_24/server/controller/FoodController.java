@@ -4,10 +4,13 @@ import com.pre_capstone_design_24.server.global.response.ApiResponse;
 import com.pre_capstone_design_24.server.global.response.Status;
 import com.pre_capstone_design_24.server.requestDto.FoodRequestDto;
 import com.pre_capstone_design_24.server.responseDto.FoodResponseDto;
+import com.pre_capstone_design_24.server.responseDto.PagedResponseDto;
 import com.pre_capstone_design_24.server.service.FoodService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +40,17 @@ public class FoodController {
             @PathVariable("foodId") Long foodId
     ) {
         FoodResponseDto foodResponseDto = foodService.getFood(foodId);
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), foodResponseDto);
+    }
+
+    @Operation(summary = "음식 최신순 조회")
+    @GetMapping("/orderBy")
+    public ApiResponse<PagedResponseDto<FoodResponseDto>> getFood(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        PagedResponseDto<FoodResponseDto> foodResponseDto = foodService.getFoodByCreatedAt(pageable);
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), foodResponseDto);
     }
 
