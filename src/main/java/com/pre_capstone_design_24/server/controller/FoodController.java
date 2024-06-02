@@ -75,6 +75,17 @@ public class FoodController {
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), null);
     }
 
+    @Operation(summary = "음식 리스트로 삭제")
+    @Secured({"ROLE_USER"})
+    @DeleteMapping("/list/delete")
+    public ApiResponse<?> deleteFoodList(
+           @RequestParam List<Long> foodIdList
+    ) {
+        foodService.deleteFoodList(foodIdList);
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), null);
+    }
+
+
     @Operation(summary = "전체 음식 조회")
     @GetMapping("")
     public ApiResponse<List<FoodResponseDto>> getAllFoods() {

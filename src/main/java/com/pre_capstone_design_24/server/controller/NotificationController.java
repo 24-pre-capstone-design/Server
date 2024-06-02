@@ -77,6 +77,16 @@ public class NotificationController {
         return ApiResponse.onSuccess(Status.OK.getCode(), "알림이 삭제되었습니다.", null);
     }
 
+    @Operation(summary = "알림 리스트로 삭제")
+    @Secured({"ROLE_USER"})
+    @DeleteMapping("/list/delete")
+    public ApiResponse<?> deleteNotification(
+            @RequestParam List<Long> notificationIdList
+    ) {
+        notificationService.deleteNotificationList(notificationIdList);
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), null);
+    }
+
     @Operation(summary = "sse세션연결")
     @GetMapping(value = "/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter subscribe(@AuthenticationPrincipal User principal,
