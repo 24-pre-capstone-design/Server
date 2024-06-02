@@ -1,5 +1,6 @@
 package com.pre_capstone_design_24.server.controller;
 
+import com.pre_capstone_design_24.server.domain.FoodCategory;
 import com.pre_capstone_design_24.server.domain.OrderHistoryStatus;
 import com.pre_capstone_design_24.server.global.response.ApiResponse;
 import com.pre_capstone_design_24.server.global.response.Status;
@@ -188,6 +189,16 @@ public class OrderHistoryController {
     ) {
         long numberOfOrderHistory = orderHistoryService.getNumberOfOrderHistoryByDate(date);
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), numberOfOrderHistory);
+    }
+
+    @Operation(summary = "음식카테고리별 매출액 조회")
+    @Secured({"ROLE_USER"})
+    @GetMapping("/revenue/foodCategory")
+    public ApiResponse<?> getRevenueByFoodCategory(
+            @RequestParam("foodCategoryId") Long foodCategoryId
+    ) {
+        long revenue = orderHistoryService.getRevenueByFoodCategory(foodCategoryId);
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), revenue);
     }
 
 }
