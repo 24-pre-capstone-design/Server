@@ -16,7 +16,7 @@ public class PasswordUpdateDto {
 
     @Password
     @NotNull
-    @Schema(description = "새로운 비밀번호", example = "1234asdf!")
+    @Schema(description = "새로운 비밀번호", example = "asdf1234!")
     private String newPassword;
 
 }
