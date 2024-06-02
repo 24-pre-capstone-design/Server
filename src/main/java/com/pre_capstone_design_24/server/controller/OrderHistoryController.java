@@ -16,6 +16,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -116,6 +117,20 @@ public class OrderHistoryController {
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), orderHistoryResponseDtoList);
     }
 
+    @Operation(summary = "기간별 주문내역 조회")
+    @Secured({"ROLE_USER"})
+    @GetMapping("/period")
+    public ApiResponse<?> getRevenueByPeriod(
+            @RequestParam(name = "startDate") LocalDate startDate,
+            @RequestParam(name = "endDate") LocalDate endDate,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        PagedResponseDto<OrderHistoryResponseDto> orderHistoryResponseDtoList = orderHistoryService.getOrderHistoryByPeriod(startDate, endDate, pageable);
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), orderHistoryResponseDtoList);
+    }
+
     @Operation(summary = "월 매출액 조회")
     @Secured({"ROLE_USER"})
     @GetMapping("/month")
@@ -134,6 +149,35 @@ public class OrderHistoryController {
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), numberOfNEWOrderHistory);
     }
 
+    @Operation(summary = "최근 N일 매출액 조회")
+    @Secured({"ROLE_USER"})
+    @GetMapping("/revenue/lastNDays")
+    public ApiResponse<?> getRevenueByLastNDays(
+            @RequestParam int lastNDays
+    ) {
+        long revenue = orderHistoryService.getRevenueByLastNDays(lastNDays);
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), revenue);
+    }
 
+    @Operation(summary = "기간별 매출액 조회")
+    @Secured({"ROLE_USER"})
+    @GetMapping("/revenue/period")
+    public ApiResponse<?> getRevenueByPeriod(
+            @RequestParam(name = "startDate") LocalDate startDate,
+            @RequestParam(name = "endDate") LocalDate endDate
+    ) {
+        long revenue = orderHistoryService.getRevenueByPeriod(startDate, endDate);
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), revenue);
+    }
+
+    @Operation(summary = "날짜별 매출액 조회")
+    @Secured({"ROLE_USER"})
+    @GetMapping("/revenue/date")
+    public ApiResponse<?> getRevenueByPeriod(
+            @RequestParam(name = "date") LocalDate date
+    ) {
+        long revenue = orderHistoryService.getRevenueByDate(date);
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), revenue);
+    }
 
 }

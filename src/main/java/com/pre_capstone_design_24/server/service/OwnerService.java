@@ -6,6 +6,7 @@ import com.pre_capstone_design_24.server.global.response.GeneralException;
 import com.pre_capstone_design_24.server.global.response.Status;
 import com.pre_capstone_design_24.server.repository.OwnerRepository;
 import com.pre_capstone_design_24.server.requestDto.OwnerRequestDto;
+import com.pre_capstone_design_24.server.requestDto.OwnerUpdateDto;
 import com.pre_capstone_design_24.server.responseDto.OwnerResponseDto;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -49,14 +50,14 @@ public class OwnerService {
         return ownerRepository.existsById(id);
     }
 
-    public void UpdateOwner(String id, OwnerRequestDto ownerRequestDto) {
+    public void UpdateOwner(String id, OwnerUpdateDto ownerUpdateDto) {
         Owner currentOwner = getCurrentOwner();
         if (!currentOwner.getId().equals(id)){
             throw new GeneralException(Status.UNAUTHORIZED);
         }
         Owner owner = ownerRepository.findById(id)
             .orElseThrow(() -> new GeneralException(Status.OWNER_NOT_FOUND));
-        owner.update(ownerRequestDto, passwordEncoder);
+        owner.update(ownerUpdateDto);
         save(owner);
     }
 

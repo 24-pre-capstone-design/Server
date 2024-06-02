@@ -2,6 +2,7 @@ package com.pre_capstone_design_24.server.controller;
 
 import com.pre_capstone_design_24.server.global.response.Status;
 import com.pre_capstone_design_24.server.requestDto.OwnerRequestDto;
+import com.pre_capstone_design_24.server.requestDto.OwnerUpdateDto;
 import com.pre_capstone_design_24.server.responseDto.OwnerResponseDto;
 import com.pre_capstone_design_24.server.service.OwnerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -51,10 +52,10 @@ public class OwnerController {
     @PatchMapping("/{ownerId}")
     @Secured({"ROLE_USER"})
     public ApiResponse<?> updateOwner(
-        @RequestBody OwnerRequestDto ownerRequestDto,
+        @RequestBody OwnerUpdateDto ownerUpdateDto,
         @PathVariable("ownerId") String ownerId
     ) {
-        ownerService.UpdateOwner(ownerId, ownerRequestDto);
+        ownerService.UpdateOwner(ownerId, ownerUpdateDto);
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), null);
     }
 
@@ -67,4 +68,13 @@ public class OwnerController {
         ownerService.deleteOwner(ownerId);
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), null);
     }
+
+    @GetMapping("/currentOwner")
+    @Operation(summary = "현재 로그인한 사장님 조회")
+    @Secured({"ROLE_USER"})
+    public ApiResponse<?> getCurrentOwner () {
+        OwnerResponseDto ownerResponseDto = OwnerResponseDto.of(ownerService.getCurrentOwner());
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), ownerResponseDto);
+    }
+
 }
