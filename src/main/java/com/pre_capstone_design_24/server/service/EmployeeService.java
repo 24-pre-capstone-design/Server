@@ -62,6 +62,12 @@ public class EmployeeService {
         delete(employee);
     }
 
+    public void deleteEmployeeList(List<Long> employeeIdList) {
+        for (Long id : employeeIdList) {
+            deleteEmployee(id);
+        }
+    }
+
     public void save(Employee employee) {
         employeeRepository.save(employee);
     }

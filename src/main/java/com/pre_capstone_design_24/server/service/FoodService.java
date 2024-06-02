@@ -2,6 +2,7 @@ package com.pre_capstone_design_24.server.service;
 
 import com.pre_capstone_design_24.server.domain.Food;
 import com.pre_capstone_design_24.server.domain.FoodCategory;
+import com.pre_capstone_design_24.server.domain.FoodStatus;
 import com.pre_capstone_design_24.server.domain.Notification;
 import com.pre_capstone_design_24.server.global.response.GeneralException;
 import com.pre_capstone_design_24.server.global.response.Status;
@@ -53,7 +54,14 @@ public class FoodService {
 
     public void deleteFood(Long id) {
         Food food = getFoodById(id);
-        delete(food);
+        food.updateStatus(FoodStatus.DELETED);
+        save(food);
+    }
+
+    public void deleteFoodList(List<Long> foodIdList) {
+        for (Long id : foodIdList) {
+            deleteFood(id);
+        }
     }
 
     public void save(Food food) {
@@ -61,7 +69,8 @@ public class FoodService {
     }
 
     public void delete(Food food) {
-        foodRepository.delete(food);
+        food.updateStatus(FoodStatus.DELETED);
+        save(food);
     }
 
     public Food getFoodById(Long id) {

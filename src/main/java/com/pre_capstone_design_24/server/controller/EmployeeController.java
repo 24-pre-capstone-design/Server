@@ -94,4 +94,15 @@ public class EmployeeController {
         employeeService.deleteEmployee(employeeId);
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), null);
     }
+
+    @Operation(summary = "직원 리스트로 삭제")
+    @Secured({"ROLE_USER"})
+    @DeleteMapping("/list/delete")
+    public ApiResponse<?> deleteEmployeeList(
+            @RequestParam List<Long> employeeIdList
+    ) {
+        employeeService.deleteEmployeeList(employeeIdList);
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), null);
+    }
+
 }

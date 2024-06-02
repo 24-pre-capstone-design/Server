@@ -148,6 +148,12 @@ public class NotificationService {
         notificationRepository.delete(notification);
     }
 
+    public void deleteNotificationList(List<Long> notificationIdList) {
+        for (Long id : notificationIdList) {
+            deleteNotification(id);
+        }
+    }
+
     public void deleteAllNotifications() {
         notificationRepository.deleteAll();
     }
