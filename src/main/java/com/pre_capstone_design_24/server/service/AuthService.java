@@ -10,6 +10,7 @@ import com.pre_capstone_design_24.server.global.util.RandomPasswordGenerator;
 import com.pre_capstone_design_24.server.repository.OwnerRepository;
 import com.pre_capstone_design_24.server.requestDto.LoginRequestDto;
 import com.pre_capstone_design_24.server.requestDto.PasswordCheckRequestDto;
+import com.pre_capstone_design_24.server.requestDto.PasswordUpdateDto;
 import com.pre_capstone_design_24.server.responseDto.IdDuplicateCheckResponseDto;
 import com.pre_capstone_design_24.server.responseDto.JwtResponseDto;
 import com.pre_capstone_design_24.server.responseDto.PasswordCheckResponseDto;
@@ -72,6 +73,12 @@ public class AuthService {
         return PasswordRandomSetResponseDto.builder()
                 .newPassword(randomPassword)
                 .build();
+    }
+
+    public void updatePassword(PasswordUpdateDto passwordUpdateDto) {
+        Owner owner = ownerService.getCurrentOwner();
+        owner.updatePassword(passwordEncoder.encode(passwordUpdateDto.getNewPassword()));
+        ownerService.save(owner);
     }
 
 }

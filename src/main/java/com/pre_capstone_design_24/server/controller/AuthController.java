@@ -4,6 +4,7 @@ import com.pre_capstone_design_24.server.global.response.ApiResponse;
 import com.pre_capstone_design_24.server.global.response.Status;
 import com.pre_capstone_design_24.server.requestDto.LoginRequestDto;
 import com.pre_capstone_design_24.server.requestDto.PasswordCheckRequestDto;
+import com.pre_capstone_design_24.server.requestDto.PasswordUpdateDto;
 import com.pre_capstone_design_24.server.responseDto.IdDuplicateCheckResponseDto;
 import com.pre_capstone_design_24.server.responseDto.JwtResponseDto;
 import com.pre_capstone_design_24.server.responseDto.PasswordCheckResponseDto;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,6 +66,16 @@ public class AuthController {
         PasswordRandomSetResponseDto passwordRandomSetResponseDto = authService.setRandomPassword(id, birthDate);
         return ApiResponse.onSuccess(Status.OK.getCode(),
                 Status.OK.getMessage(), passwordRandomSetResponseDto);
+    }
+
+    @PatchMapping("/updatePassword")
+    @Operation(summary = "비밀번호 변경하기")
+    public ApiResponse<?> updatePassword (
+            @RequestBody PasswordUpdateDto passwordUpdateDto
+    ) {
+        authService.updatePassword(passwordUpdateDto);
+       return ApiResponse.onSuccess(Status.OK.getCode(),
+               Status.OK.getMessage(), null);
     }
 
 }
