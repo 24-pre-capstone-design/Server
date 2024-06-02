@@ -172,6 +172,16 @@ public class OrderHistoryService {
         return revenue;
     }
 
+    public long getRevenueByDate(LocalDate date) {
+        long revenue = 0;
+        List<OrderHistory> orderHistoryList = findOrderHistoriesByDate(date);
+        for(OrderHistory orderHistory : orderHistoryList) {
+            List<Order> orderList = orderService.getOrdersByOrderHistoryId(orderHistory.getId());
+            revenue += orderService.getTotalCostOfOrders(orderList);
+        }
+        return revenue;
+    }
+
     public OrderHistory getOrderHistoryById(Long id) {
         return orderHistoryRepository.findById(id)
                 .orElseThrow(() -> new GeneralException(Status.ORDERHISTORY_NOT_FOUND));
@@ -201,6 +211,10 @@ public class OrderHistoryService {
 
     public List<OrderHistory> findOrderHistoryByYearMonth(int year, int month) {
         return orderHistoryRepository.findAllByYearMonth(year, month);
+    }
+
+    public List<OrderHistory> findOrderHistoriesByDate(LocalDate date) {
+        return orderHistoryRepository.findAllByDate(date);
     }
 
     public List<OrderHistory> findRecentOrderHistories(int days) {

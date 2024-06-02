@@ -43,6 +43,9 @@ public interface OrderHistoryRepository extends JpaRepository<OrderHistory, Long
             @Param("startDateTime") LocalDateTime startDateTime,
             @Param("endDateTime") LocalDateTime endDateTime);
 
+    @Query("SELECT oh FROM OrderHistory oh WHERE FUNCTION('DATE', oh.createdAt) = :date")
+    List<OrderHistory> findAllByDate(@Param("date") LocalDate date);
+
     Page<OrderHistory> findAllByOrderHistoryStatus(OrderHistoryStatus orderHistoryStatus, Pageable pageable);
 
     @Query("SELECT oh FROM OrderHistory oh JOIN oh.orderList o WHERE o.food.name LIKE %:keyword%")

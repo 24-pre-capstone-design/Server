@@ -170,4 +170,14 @@ public class OrderHistoryController {
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), revenue);
     }
 
+    @Operation(summary = "날짜별 매출액 조회")
+    @Secured({"ROLE_USER"})
+    @GetMapping("/revenue/date")
+    public ApiResponse<?> getRevenueByPeriod(
+            @RequestParam(name = "date") LocalDate date
+    ) {
+        long revenue = orderHistoryService.getRevenueByDate(date);
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), revenue);
+    }
+
 }
