@@ -1,5 +1,6 @@
 package com.pre_capstone_design_24.server.controller;
 
+import com.pre_capstone_design_24.server.domain.FoodCategory;
 import com.pre_capstone_design_24.server.domain.OrderHistoryStatus;
 import com.pre_capstone_design_24.server.global.response.ApiResponse;
 import com.pre_capstone_design_24.server.global.response.Status;
@@ -173,10 +174,30 @@ public class OrderHistoryController {
     @Operation(summary = "날짜별 매출액 조회")
     @Secured({"ROLE_USER"})
     @GetMapping("/revenue/date")
-    public ApiResponse<?> getRevenueByPeriod(
+    public ApiResponse<?> getRevenueByDate(
             @RequestParam(name = "date") LocalDate date
     ) {
         long revenue = orderHistoryService.getRevenueByDate(date);
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), revenue);
+    }
+
+    @Operation(summary = "날짜별 주문내역 개수 조회")
+    @Secured({"ROLE_USER"})
+    @GetMapping("/count/date")
+    public ApiResponse<?> getNumberOfOrderHistoryByDate(
+            @RequestParam(name = "date") LocalDate date
+    ) {
+        long numberOfOrderHistory = orderHistoryService.getNumberOfOrderHistoryByDate(date);
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), numberOfOrderHistory);
+    }
+
+    @Operation(summary = "음식카테고리별 매출액 조회")
+    @Secured({"ROLE_USER"})
+    @GetMapping("/revenue/foodCategory")
+    public ApiResponse<?> getRevenueByFoodCategory(
+            @RequestParam("foodCategoryId") Long foodCategoryId
+    ) {
+        long revenue = orderHistoryService.getRevenueByFoodCategory(foodCategoryId);
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), revenue);
     }
 

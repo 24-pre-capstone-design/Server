@@ -114,4 +114,12 @@ public class FoodController {
         List<FoodResponseDto> foodResponseDtos = foodService.getFoodsByFKeyword(keyword);
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), foodResponseDtos);
     }
+
+    @Operation(summary = "총 음식 개수 조회")
+    @GetMapping("/count")
+    public ApiResponse<Long> getNumberOfFood(){
+        Long numberOfFood = foodService.getNumberOfFood();
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), numberOfFood);
+    }
+
 }

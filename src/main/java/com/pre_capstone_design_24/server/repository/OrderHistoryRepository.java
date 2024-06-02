@@ -22,6 +22,9 @@ public interface OrderHistoryRepository extends JpaRepository<OrderHistory, Long
 
     long countByOrderHistoryStatus(OrderHistoryStatus orderHistoryStatus);
 
+    @Query("SELECT COUNT(o) FROM OrderHistory o WHERE FUNCTION('DATE', o.createdAt) = :createdAt")
+    long countByCreatedAt(@Param("createdAt") LocalDate createdAt);
+
     @Query("SELECT orderHistory FROM OrderHistory orderHistory WHERE FUNCTION('YEAR', orderHistory.createdAt) = :year AND FUNCTION('MONTH', orderHistory.createdAt) = :month AND FUNCTION('DAY', orderHistory.createdAt) = :day")
     Page<OrderHistory> findByYearMonthDay(int year, int month, int day, Pageable pageable);
 

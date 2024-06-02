@@ -1,5 +1,6 @@
 package com.pre_capstone_design_24.server.service;
 
+import com.pre_capstone_design_24.server.domain.FoodCategory;
 import com.pre_capstone_design_24.server.domain.Order;
 import com.pre_capstone_design_24.server.domain.OrderHistory;
 import com.pre_capstone_design_24.server.repository.OrderRepository;
@@ -38,6 +39,10 @@ public class OrderService {
 
     public List<Order> getOrdersByOrderHistoryId(Long orderHistoryId) {
         return orderRepository.findAllByOrderHistoryId(orderHistoryId);
+    }
+
+    public List<Order> getOrdersByFoodCategory(Long foodCategoryId) {
+        return orderRepository.findAllByFoodCategory(foodCategoryId);
     }
 
     public long getTotalCostOfOrders(List<Order> orderList) {

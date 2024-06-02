@@ -116,6 +116,10 @@ public class FoodService {
                 .toList();
     }
 
+    public Long getNumberOfFood() {
+        return foodRepository.count();
+    }
+
     public FoodResponseDto makeFoodResponseDto(Food food) {
         return FoodResponseDto.of(food);
     }

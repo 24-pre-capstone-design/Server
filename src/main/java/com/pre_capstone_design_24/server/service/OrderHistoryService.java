@@ -1,5 +1,6 @@
 package com.pre_capstone_design_24.server.service;
 
+import com.pre_capstone_design_24.server.domain.FoodCategory;
 import com.pre_capstone_design_24.server.domain.Order;
 import com.pre_capstone_design_24.server.domain.OrderHistory;
 import com.pre_capstone_design_24.server.domain.OrderHistoryStatus;
@@ -180,6 +181,21 @@ public class OrderHistoryService {
             revenue += orderService.getTotalCostOfOrders(orderList);
         }
         return revenue;
+    }
+
+    public long getNumberOfOrderHistoryByDate(LocalDate date) {
+        return findNumberOfOrderHistoryByCreatedAt(date);
+    }
+
+    public long getRevenueByFoodCategory(Long foodCategoryId) {
+        long revenue = 0;
+        List<Order> orderList = orderService.getOrdersByFoodCategory(foodCategoryId);
+        revenue += orderService.getTotalCostOfOrders(orderList);
+        return revenue;
+    }
+
+    public long findNumberOfOrderHistoryByCreatedAt(LocalDate date) {
+        return orderHistoryRepository.countByCreatedAt(date);
     }
 
     public OrderHistory getOrderHistoryById(Long id) {
